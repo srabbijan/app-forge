@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import confetti from "canvas-confetti";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
-import { Apple, Check, Download, Smartphone, Sparkles } from "lucide-react";
+import { Check, GitBranch, Loader2, Mail, Smartphone, Sparkles } from "lucide-react";
 
 interface BuildInfo {
   shopId: string;
@@ -13,9 +13,21 @@ interface BuildInfo {
   builtAt: number;
 }
 
+const PIPELINE_STEPS = [
+  { label: "Triggering Action", duration: 2500 },
+  { label: "Setting up build environment", duration: 3000 },
+  { label: "Compiling application", duration: 4000 },
+  { label: "Running tests", duration: 2500 },
+  { label: "Generating APK", duration: 3500 },
+  { label: "Uploading artifacts", duration: 2000 },
+  { label: "Sending download link to your email", duration: 2000 },
+];
+
 const Success = () => {
   const navigate = useNavigate();
   const [build, setBuild] = useState<BuildInfo | null>(null);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
     const raw = sessionStorage.getItem("lastBuild");
@@ -24,21 +36,38 @@ const Success = () => {
       return;
     }
     setBuild(JSON.parse(raw));
-
-    // Confetti
-    const fire = (origin: { x: number; y: number }) =>
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin,
-        colors: ["#7c3aed", "#a78bfa", "#ec4899", "#10b981", "#f59e0b"],
-      });
-    setTimeout(() => fire({ x: 0.25, y: 0.4 }), 100);
-    setTimeout(() => fire({ x: 0.75, y: 0.4 }), 350);
-    setTimeout(() => fire({ x: 0.5, y: 0.3 }), 600);
   }, [navigate]);
 
+  // Simulate pipeline steps
+  useEffect(() => {
+    if (!build || done) return;
+
+    if (currentStep >= PIPELINE_STEPS.length) {
+      setDone(true);
+      // Confetti on completion
+      const fire = (origin: { x: number; y: number }) =>
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin,
+          colors: ["#7c3aed", "#a78bfa", "#ec4899", "#10b981", "#f59e0b"],
+        });
+      setTimeout(() => fire({ x: 0.25, y: 0.4 }), 100);
+      setTimeout(() => fire({ x: 0.75, y: 0.4 }), 350);
+      setTimeout(() => fire({ x: 0.5, y: 0.3 }), 600);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setCurrentStep((s) => s + 1);
+    }, PIPELINE_STEPS[currentStep].duration);
+
+    return () => clearTimeout(timer);
+  }, [build, currentStep, done]);
+
   if (!build) return null;
+
+  const userEmail = sessionStorage.getItem("email") || "your registered email";
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
@@ -50,35 +79,65 @@ const Success = () => {
           <Link to="/">
             <Logo />
           </Link>
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/builder">Build another</Link>
-          </Button>
         </div>
       </header>
 
       <main className="container relative py-16">
         <div className="mx-auto max-w-2xl text-center">
-          {/* Success badge */}
+          {/* Status badge */}
           <div className="relative mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-primary shadow-glow animate-scale-in">
-            <Check className="h-10 w-10 text-primary-foreground" strokeWidth={3} />
-            <span className="absolute inset-0 animate-ping rounded-full bg-primary/40" />
+            {done ? (
+              <>
+                <Check className="h-10 w-10 text-primary-foreground" strokeWidth={3} />
+                <span className="absolute inset-0 animate-ping rounded-full bg-primary/40" />
+              </>
+            ) : (
+              <Loader2 className="h-10 w-10 text-primary-foreground animate-spin" />
+            )}
           </div>
 
           <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground animate-fade-in">
-            <Sparkles className="h-3 w-3" /> Build complete
+            {done ? (
+              <>
+                <Sparkles className="h-3 w-3" /> Build complete
+              </>
+            ) : (
+              <>
+                <GitBranch className="h-3 w-3" /> GitHub Action running
+              </>
+            )}
           </p>
 
-          <h1 className="text-balance text-4xl font-extrabold tracking-tight sm:text-5xl animate-fade-in-up">
-            Your app is{" "}
-            <span className="text-gradient">ready to launch!</span>
-          </h1>
-          <p
-            className="mx-auto mt-4 max-w-md text-muted-foreground animate-fade-in-up"
-            style={{ animationDelay: "120ms", animationFillMode: "backwards" }}
-          >
-            <span className="font-semibold text-foreground">{build.appName}</span> was built successfully.
-            Download below or share the install links with your team.
-          </p>
+          {done ? (
+            <>
+              <h1 className="text-balance text-4xl font-extrabold tracking-tight sm:text-5xl animate-fade-in-up">
+                Your app is{" "}
+                <span className="text-gradient">ready!</span>
+              </h1>
+              <p
+                className="mx-auto mt-4 max-w-md text-muted-foreground animate-fade-in-up"
+                style={{ animationDelay: "120ms", animationFillMode: "backwards" }}
+              >
+                <span className="font-semibold text-foreground">{build.appName}</span> was built
+                successfully. The download link has been sent to{" "}
+                <span className="font-semibold text-foreground">{userEmail}</span>.
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-balance text-4xl font-extrabold tracking-tight sm:text-5xl animate-fade-in-up">
+                Building{" "}
+                <span className="text-gradient">{build.appName}</span>
+              </h1>
+              <p
+                className="mx-auto mt-4 max-w-md text-muted-foreground animate-fade-in-up"
+                style={{ animationDelay: "120ms", animationFillMode: "backwards" }}
+              >
+                A GitHub Action is running to compile your app. The download link will be sent to{" "}
+                <span className="font-semibold text-foreground">{userEmail}</span> once complete.
+              </p>
+            </>
+          )}
 
           {/* App card */}
           <div
@@ -104,40 +163,97 @@ const Success = () => {
                   Build #{build.shopId} · v1.0.0
                 </p>
               </div>
-              <div className="flex items-center gap-1.5 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
-                <span className="h-1.5 w-1.5 rounded-full bg-success" />
-                Ready
+              <div
+                className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
+                  done
+                    ? "bg-success/10 text-success"
+                    : "bg-amber-500/10 text-amber-500"
+                }`}
+              >
+                {done ? (
+                  <>
+                    <span className="h-1.5 w-1.5 rounded-full bg-success" />
+                    Complete
+                  </>
+                ) : (
+                  <>
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+                    Building
+                  </>
+                )}
               </div>
-            </div>
-
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              <Button variant="hero" size="lg">
-                <Apple className="h-4 w-4" />
-                Download iOS
-              </Button>
-              <Button variant="outline" size="lg">
-                <Download className="h-4 w-4" />
-                Download Android
-              </Button>
             </div>
           </div>
 
-          {/* Build stats */}
+          {/* Pipeline steps */}
           <div
-            className="mt-6 grid grid-cols-3 gap-3 animate-fade-in-up"
+            className="mt-8 rounded-3xl border border-border/60 bg-card/80 p-6 backdrop-blur-xl shadow-lg text-left animate-fade-in-up"
             style={{ animationDelay: "360ms", animationFillMode: "backwards" }}
           >
-            {[
-              { label: "Build time", value: "47s" },
-              { label: "Platforms", value: "iOS + Android" },
-              { label: "Status", value: "Deployed" },
-            ].map((s) => (
-              <div key={s.label} className="rounded-2xl border border-border/60 bg-card/60 p-4 backdrop-blur-md">
-                <p className="text-xs text-muted-foreground">{s.label}</p>
-                <p className="mt-1 text-sm font-bold">{s.value}</p>
-              </div>
-            ))}
+            <div className="mb-4 flex items-center gap-2">
+              <GitBranch className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-semibold">Build Pipeline</span>
+              {!done && (
+                <span className="ml-auto text-xs text-muted-foreground">
+                  Step {Math.min(currentStep + 1, PIPELINE_STEPS.length)} of {PIPELINE_STEPS.length}
+                </span>
+              )}
+            </div>
+            <div className="space-y-3">
+              {PIPELINE_STEPS.map((step, i) => {
+                const isComplete = i < currentStep;
+                const isActive = i === currentStep && !done;
+
+                return (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center">
+                      {isComplete ? (
+                        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-success/15">
+                          <Check className="h-3 w-3 text-success" strokeWidth={3} />
+                        </div>
+                      ) : isActive ? (
+                        <Loader2 className="h-4 w-4 text-primary animate-spin" />
+                      ) : (
+                        <div className="h-2 w-2 rounded-full bg-muted-foreground/30" />
+                      )}
+                    </div>
+                    <span
+                      className={`text-sm ${
+                        isComplete
+                          ? "text-muted-foreground"
+                          : isActive
+                            ? "font-medium text-foreground"
+                            : "text-muted-foreground/50"
+                      }`}
+                    >
+                      {step.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
+
+          {/* Email notification card (shown when done) */}
+          {done && (
+            <div
+              className="mt-6 rounded-2xl border border-success/30 bg-success/5 p-5 text-left animate-fade-in-up"
+            >
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-success/15">
+                  <Mail className="h-5 w-5 text-success" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">Download link sent!</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    We've sent the APK download links to{" "}
+                    <span className="font-medium text-foreground">{userEmail}</span>. Check your inbox
+                    — it should arrive within a few minutes.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           <Button asChild variant="ghost" className="mt-10">
             <Link to="/builder">← Build another app</Link>

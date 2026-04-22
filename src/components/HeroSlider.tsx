@@ -33,7 +33,7 @@ export const HeroSlider = () => {
 
   return (
     <div className="relative w-full overflow-hidden rounded-3xl border border-border/60 bg-card shadow-lg">
-      <div className="relative aspect-[16/10] w-full">
+      <div className="relative aspect-[16/9] w-full">
         {slides.map((slide, i) => (
           <div
             key={i}

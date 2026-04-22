@@ -1,4 +1,4 @@
-import { Sparkles } from "lucide-react";
+import appIcon from "@/assets/app-icon.png";
 
 interface LogoProps {
   className?: string;
@@ -7,10 +7,9 @@ interface LogoProps {
 export const Logo = ({ className = "" }: LogoProps) => {
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <div className="relative flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
-        <Sparkles className="h-4 w-4 text-primary-foreground" strokeWidth={2.5} />
-      </div>
-      <span className="text-lg font-bold tracking-tight">Appforge</span>
+      <img src={appIcon} alt="Hishabee" className="h-8 w-8 rounded-xl" />
+
+      <span className="text-lg font-bold tracking-tight">Hishabee</span>
     </div>
   );
 };

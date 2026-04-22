@@ -6,8 +6,8 @@ import { ArrowRight, Zap, Palette, Smartphone, ShieldCheck, Rocket, Code2 } from
 
 const features = [
   { icon: Zap, title: "Instant build", desc: "From form submit to download in under 60 seconds." },
-  { icon: Palette, title: "Pixel-perfect branding", desc: "Your colors, your logo. No Appforge marks anywhere." },
-  { icon: Smartphone, title: "iOS & Android", desc: "Native-grade apps generated for both stores." },
+  { icon: Palette, title: "Pixel-perfect branding", desc: "Your colors, your logo." },
+  { icon: Smartphone, title: "Android", desc: "Native apps generated for both stores." },
   { icon: ShieldCheck, title: "Offline first", desc: "Customers shop even without internet. Auto-sync later." },
   { icon: Rocket, title: "Push notifications", desc: "Drive sales with built-in campaign tooling." },
   { icon: Code2, title: "No code required", desc: "Skip developers. Skip delays. Just ship." },
@@ -64,16 +64,7 @@ const Landing = () => {
                   Build your app <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="glass" size="xl">
-                <a href="#features">See how it works</a>
-              </Button>
-            </div>
-
-            {/* Trust */}
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-6 text-xs text-muted-foreground">
-              <span>✓ No credit card required</span>
-              <span>✓ 60-second builds</span>
-              <span>✓ Cancel anytime</span>
+            
             </div>
           </div>
 
@@ -144,33 +135,13 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* CTA */}
-      <section id="pricing" className="relative py-24">
-        <div className="container">
-          <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-primary p-12 text-center shadow-glow sm:p-20">
-            <div className="pointer-events-none absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-white/20 blur-3xl" />
-            <h2 className="relative text-balance text-4xl font-extrabold text-primary-foreground sm:text-5xl">
-              Your app is one click away.
-            </h2>
-            <p className="relative mx-auto mt-4 max-w-lg text-primary-foreground/80">
-              Join thousands of merchants who launched in minutes, not months.
-            </p>
-            <Button asChild size="xl" variant="glass" className="relative mt-8 bg-white text-foreground hover:bg-white/90">
-              <Link to="/login">
-                Start building free <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
       <footer className="border-t border-border/60 py-10">
         <div className="container flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
-          <p>© {new Date().getFullYear()} Appforge. Build apps in seconds.</p>
+          <p>© {new Date().getFullYear()} Hishabee. Build apps in seconds.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground transition-base">Privacy</a>
-            <a href="#" className="hover:text-foreground transition-base">Terms</a>
-            <a href="#" className="hover:text-foreground transition-base">Contact</a>
+            <a href="https://app.hishabee.business/privacy-policy" className="hover:text-foreground transition-base">Privacy</a>
+            <a href="https://app.hishabee.business/general-terms-of-use" className="hover:text-foreground transition-base">Terms</a>
+            <a href="https://www.hishabee.io/" className="hover:text-foreground transition-base">Contact</a>
           </div>
         </div>
       </footer>

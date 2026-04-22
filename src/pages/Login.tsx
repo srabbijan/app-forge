@@ -1,44 +1,19 @@
-import { useState, useRef, KeyboardEvent, ClipboardEvent } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Loader2, Phone } from "lucide-react";
+import { ArrowLeft, Loader2, Lock, Phone } from "lucide-react";
 import { toast } from "sonner";
 
 const Login = () => {
   const navigate = useNavigate();
   const [phone, setPhone] = useState("");
-  const [pin, setPin] = useState<string[]>(["", "", "", ""]);
+  const [pin, setPin] = useState("");
   const [loading, setLoading] = useState(false);
-  const inputs = useRef<(HTMLInputElement | null)[]>([]);
-
-  const setDigit = (i: number, v: string) => {
-    const digit = v.replace(/\D/g, "").slice(-1);
-    const next = [...pin];
-    next[i] = digit;
-    setPin(next);
-    if (digit && i < 3) inputs.current[i + 1]?.focus();
-  };
-
-  const onKey = (i: number, e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace" && !pin[i] && i > 0) inputs.current[i - 1]?.focus();
-    if (e.key === "ArrowLeft" && i > 0) inputs.current[i - 1]?.focus();
-    if (e.key === "ArrowRight" && i < 3) inputs.current[i + 1]?.focus();
-  };
-
-  const onPaste = (e: ClipboardEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const data = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
-    if (!data) return;
-    const next = ["", "", "", ""];
-    data.split("").forEach((d, i) => (next[i] = d));
-    setPin(next);
-    inputs.current[Math.min(data.length, 3)]?.focus();
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const pinValue = pin.join("");
+    const pinValue = pin;
     if (phone.length < 8) return toast.error("Enter a valid phone number");
     if (pinValue.length < 4) return toast.error("Enter your 4-digit PIN");
 
@@ -92,7 +67,7 @@ const Login = () => {
                   autoComplete="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value.replace(/[^\d+\s]/g, ""))}
-                  placeholder="+1 555 000 0000"
+                  placeholder="0123456789"
                   className="h-12 w-full rounded-xl border border-input bg-background pl-11 pr-4 text-base outline-none transition-base placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/15"
                 />
               </div>
@@ -101,23 +76,19 @@ const Login = () => {
             {/* PIN */}
             <div className="space-y-2">
               <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                4-digit PIN
+                5-digit PIN
               </label>
-              <div className="flex gap-3">
-                {pin.map((d, i) => (
-                  <input
-                    key={i}
-                    ref={(el) => (inputs.current[i] = el)}
-                    type="password"
-                    inputMode="numeric"
-                    maxLength={1}
-                    value={d}
-                    onChange={(e) => setDigit(i, e.target.value)}
-                    onKeyDown={(e) => onKey(i, e)}
-                    onPaste={onPaste}
-                    className="h-14 flex-1 rounded-xl border border-input bg-background text-center text-2xl font-bold outline-none transition-base focus:border-primary focus:ring-4 focus:ring-primary/15"
-                  />
-                ))}
+              <div className="group relative">
+                <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-base group-focus-within:text-primary" />
+                <input
+                  type="password"
+                  inputMode="numeric"
+                  maxLength={5}
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 5))}
+                  placeholder="•••••"
+                  className="h-12 w-full rounded-xl border border-input bg-background pl-11 pr-4 text-base outline-none transition-base placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/15"
+                />
               </div>
             </div>
 
@@ -131,22 +102,9 @@ const Login = () => {
               )}
             </Button>
 
-            <p className="text-center text-xs text-muted-foreground">
-              By continuing you agree to our{" "}
-              <a href="#" className="font-medium text-foreground underline-offset-2 hover:underline">
-                Terms
-              </a>{" "}
-              &{" "}
-              <a href="#" className="font-medium text-foreground underline-offset-2 hover:underline">
-                Privacy
-              </a>
-            </p>
           </form>
         </div>
 
-        <p className="mt-6 text-center text-xs text-muted-foreground">
-          Hint: any phone (8+ digits) and any 4-digit PIN works for the demo.
-        </p>
       </div>
     </div>
   );

@@ -34,17 +34,10 @@ export const Navbar = () => {
           <a href="#how" className="text-sm font-medium text-muted-foreground transition-base hover:text-foreground">
             How it works
           </a>
-          <a href="#pricing" className="text-sm font-medium text-muted-foreground transition-base hover:text-foreground">
-            Pricing
-          </a>
         </nav>
 
         <div className="flex items-center gap-2">
-          {location.pathname !== "/login" && (
-            <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
-              <Link to="/login">Sign in</Link>
-            </Button>
-          )}
+          
           <Button asChild variant="hero" size="sm">
             <Link to="/login">Build your app</Link>
           </Button>

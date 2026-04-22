@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Logo } from "@/components/Logo";
 import { PhonePreview } from "@/components/PhonePreview";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ImagePlus, Loader2, Rocket, Sparkles, X } from "lucide-react";
+import { ArrowLeft, ImagePlus, Loader2, Mail, Rocket, ShoppingBag, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -50,6 +50,7 @@ const Builder = () => {
   const navigate = useNavigate();
   const [shopId, setShopId] = useState("");
   const [appName, setAppName] = useState("My Shop");
+  const [email, setEmail] = useState("");
   const [appIcon, setAppIcon] = useState<string | undefined>();
   const [color, setColor] = useState(COLOR_PRESETS[0].hsl);
   const [building, setBuilding] = useState(false);
@@ -75,10 +76,13 @@ const Builder = () => {
 
   const handleBuild = () => {
     if (!appName.trim()) return toast.error("Give your app a name");
+    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      return toast.error("Enter a valid email address");
     setBuilding(true);
+    sessionStorage.setItem("email", email);
     sessionStorage.setItem(
       "lastBuild",
-      JSON.stringify({ shopId, appName, appIcon, color, builtAt: Date.now() })
+      JSON.stringify({ shopId, appName, appIcon, color, email, builtAt: Date.now() })
     );
     setTimeout(() => navigate("/success"), 2200);
   };
@@ -113,26 +117,37 @@ const Builder = () => {
           <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
             <Sparkles className="h-3 w-3" /> Step 1 of 1
           </div>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Customize your app</h1>
-          <p className="mt-2 text-muted-foreground">
-            Tweak the inputs on the left — watch your app come to life on the right.
-          </p>
+          
         </div>
 
         <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
           {/* FORM */}
           <div className="space-y-6">
-            {/* Shop ID */}
+            {/* Shop ID
             <Field label="Shop ID" hint="Auto-filled from your account">
               <input
                 value={shopId}
                 disabled
                 className="h-12 w-full cursor-not-allowed rounded-xl border border-input bg-secondary/50 px-4 font-mono text-sm text-muted-foreground"
               />
+            </Field> */}
+
+            {/* Email */}
+            <Field label="Email" hint="We'll send the download link here">
+              <div className="group relative">
+                <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-base group-focus-within:text-primary" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="h-12 w-full rounded-xl border border-input bg-background pl-11 pr-4 outline-none transition-base placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/15"
+                />
+              </div>
             </Field>
 
             {/* App Name */}
-            <Field label="App name" hint="This appears on the home screen">
+            <Field label="App name" hint="This appears on app icon">
               <input
                 value={appName}
                 onChange={(e) => setAppName(e.target.value.slice(0, 30))}
@@ -204,17 +219,7 @@ const Builder = () => {
 
             {/* Build CTA */}
             <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-card to-secondary/40 p-6">
-              <div className="flex items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
-                  <Rocket className="h-5 w-5" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold">Ready to ship?</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    We'll compile your iOS and Android builds in about 60 seconds.
-                  </p>
-                </div>
-              </div>
+             
               <Button
                 onClick={handleBuild}
                 variant="hero"
@@ -229,7 +234,7 @@ const Builder = () => {
                   </>
                 ) : (
                   <>
-                    Build my app <Rocket className="h-4 w-4" />
+                    Build app <Rocket className="h-4 w-4" />
                   </>
                 )}
               </Button>
@@ -237,7 +242,28 @@ const Builder = () => {
           </div>
 
           {/* PREVIEW */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
+          <div className="lg:sticky lg:top-24 lg:self-start space-y-6">
+            {/* App Icon Preview */}
+            <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-secondary/60 via-card to-accent/40 p-6">
+              <p className="mb-4 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">App Icon Preview</p>
+              <div className="flex justify-center">
+                <div className="flex flex-col items-center gap-2">
+                  <div
+                    className="flex h-[72px] w-[72px] items-center justify-center overflow-hidden rounded-[18px] shadow-lg"
+                    style={{ background: appIcon ? undefined : `linear-gradient(135deg, hsl(${color}), hsl(${color} / 0.7))` }}
+                  >
+                    {appIcon ? (
+                      <img src={appIcon} alt="App icon" className="h-full w-full object-cover" />
+                    ) : (
+                      <ShoppingBag className="h-8 w-8 text-white" />
+                    )}
+                  </div>
+                  <span className="max-w-[80px] truncate text-xs font-medium">{appName || "Your App"}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Phone Preview */}
             <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-secondary/60 via-card to-accent/40 p-8 sm:p-12">
               <div className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-card/80 px-3 py-1 text-xs font-medium backdrop-blur-md">
                 <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
@@ -247,9 +273,6 @@ const Builder = () => {
                 <PhonePreview appName={appName} appIcon={appIcon} primaryColor={color} />
               </div>
             </div>
-            <p className="mt-4 text-center text-xs text-muted-foreground">
-              Updates instantly as you customize ✨
-            </p>
           </div>
         </div>
       </main>
