@@ -154,29 +154,22 @@ const Builder = () => {
       const primaryColor = hslToHex(color);
 
       // 4. Trigger GitHub Actions workflow
-      const owner = import.meta.env.VITE_GH_REPO_OWNER;
-      const repo = import.meta.env.VITE_GH_REPO_NAME;
-      const token = import.meta.env.VITE_GH_TOKEN;
-      const branch = import.meta.env.VITE_GH_BRANCH ?? "master";
 
       const response = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/actions/workflows/android.yml/dispatches`,
+        `https://app.hishabee.business/white-label/dispatch`,
         {
           method: "POST",
           headers: {
             Accept: "application/vnd.github+json",
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            ref: branch,
-            inputs: {
-              mail: values.email,
-              shopId,
-              appName: appNameSafe,
-              primaryColor: `0xFF${primaryColor.toUpperCase()}`,
-              splashUrl: splashUrl ?? "",
-            },
+            mail: values.email,
+            shopId,
+            appName: appNameSafe,
+            primaryColor: `0xFF${primaryColor.toUpperCase()}`,
+            splashUrl: splashUrl ?? "",
           }),
         },
       );

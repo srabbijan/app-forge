@@ -23,6 +23,7 @@ import { CopyRight } from "./common/CopyRight";
 import { PageSubTitle, Text } from "./common/Text";
 import { Card } from "./ui/card";
 import defaultShop from "/shop_view.svg";
+import { toast } from "sonner";
 
 const SUBSCRIPTION_URL = "https://web.hishabee.business/";
 
@@ -117,15 +118,16 @@ const ShopUi = ({
   const setCurrentShop = useCommonStore((state) => state.setCurrentShop);
   const currentShop = useCommonStore((state) => state.currentShop);
   const [loading, setLoading] = useState(false);
-  const [paywallShop, setPaywallShop] = useState<IShop | null>(null);
+  // const [paywallShop, setPaywallShop] = useState<IShop | null>(null);
 
   const setTotalShopCount = useCommonStore((state) => state.setTotalShopCount);
 
   const handleContinue = (shop: IShop) => {
-    if (shop.package !== "ADVANCED") {
-      setPaywallShop(shop);
-      return;
-    }
+    // if (shop.package !== "ADVANCED") {
+    //   // setPaywallShop(shop);
+
+    //   return;
+    // }
     setLoading(true);
     setTotalShopCount(shops.length);
     const shopData = {
@@ -158,11 +160,11 @@ const ShopUi = ({
   return (
     <div className="space-y-4 max-7xl mx-auto flex flex-col items-center justify-center py-8">
       {loading && <BeeLoader />}
-      <PaywallDialog
+      {/* <PaywallDialog
         shop={paywallShop}
         open={!!paywallShop}
         onClose={() => setPaywallShop(null)}
-      />
+      /> */}
       <BrandingLogo />
       <PageSubTitle title={"Choose your Shop"} />
       <div className="gap-4 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3">
