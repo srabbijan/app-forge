@@ -40,6 +40,21 @@ const COLOR_PRESETS = [
   { name: "Sky", hsl: "205 90% 55%" },
 ];
 
+const hslToHex = (hsl: string): string => {
+  const [h, s, l] = hsl.split(" ").map((v) => parseFloat(v));
+  const sl = s / 100;
+  const ll = l / 100;
+  const a = sl * Math.min(ll, 1 - ll);
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12;
+    const color = ll - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color)
+      .toString(16)
+      .padStart(2, "0");
+  };
+  return `${f(0)}${f(8)}${f(4)}`.toUpperCase();
+};
+
 const hexToHsl = (hex: string): string => {
   const r = parseInt(hex.slice(1, 3), 16) / 255;
   const g = parseInt(hex.slice(3, 5), 16) / 255;
@@ -94,7 +109,7 @@ const Builder = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      appName: "My Shop",
+      appName: "",
     },
   });
 
@@ -135,35 +150,26 @@ const Builder = () => {
       // 2. Sanitize app name for use in build scripts (alphanumeric + spaces only)
       const appNameSafe = values.appName.replace(/[^a-zA-Z0-9 ]/g, "").trim();
 
-      // 3. Convert HSL primary color to hex-style Android color (strip spaces/%)
-      //    GitHub workflow expects format like "FF6200EE" — we send the hsl string
-      //    and let the workflow handle it, but strip to a clean value
-      const primaryColor = color.replace(/[^0-9%a-zA-Z. ]/g, "").trim();
+      // 3. Convert HSL → HEX for Android (e.g. "FF6200EE")
+      const primaryColor = hslToHex(color);
 
       // 4. Trigger GitHub Actions workflow
-      const owner = import.meta.env.VITE_GH_REPO_OWNER;
-      const repo = import.meta.env.VITE_GH_REPO_NAME;
-      const token = import.meta.env.VITE_GH_TOKEN;
-      const branch = import.meta.env.VITE_GH_BRANCH ?? "master";
 
       const response = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/actions/workflows/android.yml/dispatches`,
+        `https://app.hishabee.business/white-label/dispatch`,
         {
           method: "POST",
           headers: {
             Accept: "application/vnd.github+json",
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            ref: branch,
-            inputs: {
-              mail: values.email,
-              shopId,
-              appName: appNameSafe,
-              primaryColor,
-              splashUrl: splashUrl ?? "",
-            },
+            mail: values.email,
+            shopId,
+            appName: appNameSafe,
+            primaryColor: `0xFF${primaryColor.toUpperCase()}`,
+            splashUrl: splashUrl ?? "",
           }),
         },
       );
