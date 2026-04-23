@@ -1,3 +1,4 @@
+import { IShopMain } from "@/types/shop";
 import { all_countries } from "./../constants/countries";
 // create a common for all common state and actions
 import {
@@ -38,9 +39,18 @@ type CommonState = {
   isNumberChecked: boolean;
   currentNumber: string;
   user: IUser;
+  token: string;
+  currentShop: IShopMain | null;
+  currentShopId: string | null;
+  signupData: {
+    brand_name: string;
+    address: string;
+    intent: string; // BOOK_KEEPING, ONLINE_SELL, BOTH
+  } | null;
 };
 
 type CommonActions = {
+  logout: () => void;
   setShowCountryCodeSelector: (showCountryCodeSelector: boolean) => void;
   setPhoneCode: (phoneCode: IPhoneCode) => void;
   setGeoInfo: (geoInfo: IGeoInfo) => void;
@@ -50,6 +60,14 @@ type CommonActions = {
   setIsNumberChecked: (isNumberChecked: boolean) => void;
   setCurrentNumber: (currentNumber: string) => void;
   setUser: (user: IUser) => void;
+  setToken: (token: string) => void;
+  setCurrentShop: (shop: IShopMain) => void;
+  setCurrentShopId: (shopId: string) => void;
+  setSignupData: (signupData: {
+    brand_name: string;
+    address: string;
+    intent: string;
+  }) => void;
 };
 
 export const useCommonStore = create<CommonState & CommonActions>()(
@@ -58,6 +76,37 @@ export const useCommonStore = create<CommonState & CommonActions>()(
       user: null,
       setUser: (user: IUser) => {
         set({ user });
+      },
+      token: null,
+      setToken: (token: string) => {
+        set({ token });
+      },
+      logout: () => {
+        set({
+          user: null,
+          token: null,
+          currentNumber: null,
+        });
+      },
+      currentShop: null,
+      setCurrentShop: (shop: IShopMain) => {
+        set({
+          currentShop: shop,
+          currentShopId: shop.id.toString(),
+          signupData: null,
+        });
+      },
+      currentShopId: null,
+      setCurrentShopId: (shopId: string) => {
+        set({ currentShopId: shopId, signupData: null });
+      },
+      signupData: null,
+      setSignupData: (signupData: {
+        brand_name: string;
+        address: string;
+        intent: string;
+      }) => {
+        set({ signupData });
       },
       country_code: "88",
       setCountryCode: (country_code) => {
@@ -83,7 +132,6 @@ export const useCommonStore = create<CommonState & CommonActions>()(
           };
         });
       },
-
       phoneCode: phone_codes[0],
       setPhoneCode: (phoneCode: IPhoneCode) =>
         set(() => {
@@ -155,14 +203,18 @@ export const useCommonStore = create<CommonState & CommonActions>()(
       partialize: (state) => ({
         country_code: state.country_code,
         phoneCode: state.phoneCode,
-        geoInfo: state.geoInfo,
         totalShopCount: state.totalShopCount,
         isNumberChecked: state.isNumberChecked,
         user: state.user,
+        shopId: state.currentShopId,
       }),
     },
   ),
 );
+
+export const useUser = () => useCommonStore((state) => state.user);
+export const useCurrentNumber = () =>
+  useCommonStore((state) => state.currentNumber);
 
 export const useCurrentPhoneCode = () => {
   return useCommonStore((state) => state.phoneCode);

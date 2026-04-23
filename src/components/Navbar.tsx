@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useUser } from "@/stores/store";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
+  const user = useUser();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 12);
@@ -46,7 +47,7 @@ export const Navbar = () => {
 
         <div className="flex items-center gap-2">
           <Button asChild variant="hero" size="sm">
-            <Link to="/login">Build your app</Link>
+            <Link to={user ? "/shop" : "/login"}>Build your app</Link>
           </Button>
         </div>
       </div>

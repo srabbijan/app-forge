@@ -2,6 +2,7 @@ import { HeroSlider } from "@/components/HeroSlider";
 import { Navbar } from "@/components/Navbar";
 import SetGeoInfo from "@/components/SetGeoInfo";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/stores/store";
 import {
   ArrowRight,
   Code2,
@@ -65,6 +66,8 @@ const steps = [
 ];
 
 const Landing = () => {
+  const user = useUser();
+
   return (
     <div className="relative min-h-screen bg-background">
       <Navbar />
@@ -113,7 +116,7 @@ const Landing = () => {
               }}
             >
               <Button asChild variant="hero" size="xl">
-                <Link to="/login">
+                <Link to={user ? "/shop" : "/login"}>
                   Build your app{" "}
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-all duration-300" />
                 </Link>

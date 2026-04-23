@@ -1,25 +1,23 @@
-import { type ChangeEvent, useState } from "react";
-
 import { PasswordInput } from "@/components/PasswordInput";
 import { Button } from "@/components/ui/button";
-import { ReloadIcon } from "@radix-ui/react-icons";
-
 import http from "@/services/http";
-import { useMutation } from "@tanstack/react-query";
-import { Navigate, useNavigate } from "react-router-dom";
-
-import { AxiosError } from "axios";
-
-import useCommonStore, { useCurrentPhoneCode } from "@/stores/store";
+import useCommonStore, {
+  useCurrentNumber,
+  useCurrentPhoneCode,
+} from "@/stores/store";
 import { LoginResponse } from "@/types/apiResponse";
-import { Text } from "../Text";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { type ChangeEvent, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { Text } from "../common/Text";
 
 const GivePin = () => {
   const navigate = useNavigate();
   const [pin, setPin] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const currentNumber = useCommonStore((state) => state.currentNumber);
-  const mobile_number = currentNumber;
+  const mobile_number = useCurrentNumber();
   const commonStore = useCommonStore();
 
   const phoneCode = useCurrentPhoneCode();
@@ -37,6 +35,7 @@ const GivePin = () => {
       if (data.code === 200 && data.user) {
         setError(null);
         commonStore.setUser(data.user);
+        commonStore.setToken(data.access_token);
         void navigate("/shop");
       } else {
         setError(data.message);

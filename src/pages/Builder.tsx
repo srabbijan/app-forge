@@ -1,11 +1,20 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Logo } from "@/components/Logo";
 import { PhonePreview } from "@/components/PhonePreview";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ImagePlus, Loader2, Mail, Rocket, ShoppingBag, Sparkles, X } from "lucide-react";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import {
+  ArrowLeft,
+  ImagePlus,
+  Loader2,
+  Mail,
+  Rocket,
+  ShoppingBag,
+  Sparkles,
+  X,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const COLOR_PRESETS = [
   { name: "Indigo", hsl: "250 84% 60%" },
@@ -55,15 +64,16 @@ const Builder = () => {
   const [color, setColor] = useState(COLOR_PRESETS[0].hsl);
   const [building, setBuilding] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const store = JSON.parse(localStorage.getItem("common-store"));
+  const shop_id = store.state.shopId;
 
   useEffect(() => {
-    const id = sessionStorage.getItem("shopId");
-    if (!id) {
+    if (!shop_id) {
       navigate("/login");
       return;
     }
-    setShopId(id);
-  }, [navigate]);
+    setShopId(shop_id);
+  }, [navigate, shop_id]);
 
   const handleIcon = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -82,7 +92,14 @@ const Builder = () => {
     sessionStorage.setItem("email", email);
     sessionStorage.setItem(
       "lastBuild",
-      JSON.stringify({ shopId, appName, appIcon, color, email, builtAt: Date.now() })
+      JSON.stringify({
+        shopId,
+        appName,
+        appIcon,
+        color,
+        email,
+        builtAt: Date.now(),
+      }),
     );
     setTimeout(() => navigate("/success"), 2200);
   };
@@ -102,7 +119,9 @@ const Builder = () => {
             </button>
             <Logo />
             <span className="hidden h-5 w-px bg-border sm:block" />
-            <span className="hidden text-sm text-muted-foreground sm:block">App builder</span>
+            <span className="hidden text-sm text-muted-foreground sm:block">
+              App builder
+            </span>
           </div>
           <div className="flex items-center gap-2 rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs">
             <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
@@ -117,7 +136,6 @@ const Builder = () => {
           <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
             <Sparkles className="h-3 w-3" /> Step 1 of 1
           </div>
-          
         </div>
 
         <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
@@ -154,17 +172,29 @@ const Builder = () => {
                 placeholder="e.g. Sunset Boutique"
                 className="h-12 w-full rounded-xl border border-input bg-background px-4 outline-none transition-base focus:border-primary focus:ring-4 focus:ring-primary/15"
               />
-              <div className="mt-1 text-right text-xs text-muted-foreground">{appName.length}/30</div>
+              <div className="mt-1 text-right text-xs text-muted-foreground">
+                {appName.length}/30
+              </div>
             </Field>
 
             {/* Icon */}
             <Field label="App icon" hint="Square image, at least 512×512px">
-              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleIcon} />
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleIcon}
+              />
               <div className="flex items-center gap-4">
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-dashed border-border bg-secondary/40">
                   {appIcon ? (
                     <>
-                      <img src={appIcon} alt="App icon" className="h-full w-full object-cover" />
+                      <img
+                        src={appIcon}
+                        alt="App icon"
+                        className="h-full w-full object-cover"
+                      />
                       <button
                         onClick={() => setAppIcon(undefined)}
                         className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm transition-base hover:scale-110"
@@ -179,7 +209,10 @@ const Builder = () => {
                     </div>
                   )}
                 </div>
-                <Button variant="outline" onClick={() => fileRef.current?.click()}>
+                <Button
+                  variant="outline"
+                  onClick={() => fileRef.current?.click()}
+                >
                   <ImagePlus className="h-4 w-4" />
                   {appIcon ? "Change icon" : "Upload icon"}
                 </Button>
@@ -198,7 +231,9 @@ const Builder = () => {
                       title={preset.name}
                       className={cn(
                         "h-10 w-10 rounded-full border-2 transition-bounce hover:scale-110",
-                        active ? "border-foreground ring-4 ring-foreground/10" : "border-transparent"
+                        active
+                          ? "border-foreground ring-4 ring-foreground/10"
+                          : "border-transparent",
                       )}
                       style={{ background: `hsl(${preset.hsl})` }}
                       aria-label={preset.name}
@@ -219,7 +254,6 @@ const Builder = () => {
 
             {/* Build CTA */}
             <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-card to-secondary/40 p-6">
-             
               <Button
                 onClick={handleBuild}
                 variant="hero"
@@ -245,20 +279,32 @@ const Builder = () => {
           <div className="lg:sticky lg:top-24 lg:self-start space-y-6">
             {/* App Icon Preview */}
             <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-secondary/60 via-card to-accent/40 p-6">
-              <p className="mb-4 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">App Icon Preview</p>
+              <p className="mb-4 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                App Icon Preview
+              </p>
               <div className="flex justify-center">
                 <div className="flex flex-col items-center gap-2">
                   <div
                     className="flex h-[72px] w-[72px] items-center justify-center overflow-hidden rounded-[18px] shadow-lg"
-                    style={{ background: appIcon ? undefined : `linear-gradient(135deg, hsl(${color}), hsl(${color} / 0.7))` }}
+                    style={{
+                      background: appIcon
+                        ? undefined
+                        : `linear-gradient(135deg, hsl(${color}), hsl(${color} / 0.7))`,
+                    }}
                   >
                     {appIcon ? (
-                      <img src={appIcon} alt="App icon" className="h-full w-full object-cover" />
+                      <img
+                        src={appIcon}
+                        alt="App icon"
+                        className="h-full w-full object-cover"
+                      />
                     ) : (
                       <ShoppingBag className="h-8 w-8 text-white" />
                     )}
                   </div>
-                  <span className="max-w-[80px] truncate text-xs font-medium">{appName || "Your App"}</span>
+                  <span className="max-w-[80px] truncate text-xs font-medium">
+                    {appName || "Your App"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -270,7 +316,11 @@ const Builder = () => {
                 Live preview
               </div>
               <div className="flex justify-center pt-4">
-                <PhonePreview appName={appName} appIcon={appIcon} primaryColor={color} />
+                <PhonePreview
+                  appName={appName}
+                  appIcon={appIcon}
+                  primaryColor={color}
+                />
               </div>
             </div>
           </div>

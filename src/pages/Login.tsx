@@ -1,5 +1,6 @@
 import CountryCodeSelector from "@/components/CountryCodeSelector";
 import { Logo } from "@/components/Logo";
+import SetGeoInfo from "@/components/SetGeoInfo";
 import GiveNumber from "@/components/auth/GiveNumber";
 import GivePin from "@/components/auth/GivePin";
 import useCommonStore from "@/stores/store";
@@ -8,8 +9,10 @@ import { Link } from "react-router-dom";
 
 const Login = () => {
   const isNumberChecked = useCommonStore((state) => state.isNumberChecked);
+
   return (
     <>
+      <SetGeoInfo />
       <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-12">
         {/* Background mesh */}
         <div className="absolute inset-0 bg-gradient-mesh" />

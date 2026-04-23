@@ -9,6 +9,7 @@ import Builder from "./pages/Builder.tsx";
 import Index from "./pages/Index.tsx";
 import Login from "./pages/Login.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Shop from "./pages/Shop.tsx";
 import Success from "./pages/Success.tsx";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/pin" element={<GivePin />} />
           <Route path="/error" element={<AuthError />} />
+          <Route path="/shop" element={<Shop />} />
           <Route path="/builder" element={<Builder />} />
           <Route path="/success" element={<Success />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
