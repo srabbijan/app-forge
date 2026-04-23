@@ -1,10 +1,13 @@
 import CountryCodeSelector from "@/components/CountryCodeSelector";
 import { Logo } from "@/components/Logo";
 import GiveNumber from "@/components/auth/GiveNumber";
+import GivePin from "@/components/auth/GivePin";
+import useCommonStore from "@/stores/store";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  const isNumberChecked = useCommonStore((state) => state.isNumberChecked);
   return (
     <>
       <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-12">
@@ -32,8 +35,15 @@ const Login = () => {
                 Sign in to continue building
               </p>
             </div>
-
-            <GiveNumber />
+            {isNumberChecked ? (
+              <>
+                <GivePin />
+              </>
+            ) : (
+              <>
+                <GiveNumber />
+              </>
+            )}
           </div>
         </div>
       </div>

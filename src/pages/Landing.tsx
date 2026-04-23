@@ -1,5 +1,6 @@
 import { HeroSlider } from "@/components/HeroSlider";
 import { Navbar } from "@/components/Navbar";
+import SetGeoInfo from "@/components/SetGeoInfo";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
@@ -67,6 +68,7 @@ const Landing = () => {
   return (
     <div className="relative min-h-screen bg-background">
       <Navbar />
+      <SetGeoInfo />
 
       {/* HERO */}
       <section className="relative overflow-hidden pb-20 pt-32 sm:pt-40">

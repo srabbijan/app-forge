@@ -6,7 +6,7 @@ import {
   validatePhoneNumber,
   type IPhoneCode,
 } from "@/constants/currency";
-import type { IGeoInfo } from "@/types/user";
+import type { IGeoInfo, IUser } from "@/types/user";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -35,6 +35,9 @@ type CommonState = {
   geoInfo: IGeoInfo | null;
   country_code: string;
   totalShopCount: number;
+  isNumberChecked: boolean;
+  currentNumber: string;
+  user: IUser;
 };
 
 type CommonActions = {
@@ -44,11 +47,18 @@ type CommonActions = {
   setCountryCode: (country_code: string) => void;
   setPhoneCodeByPhoneCode: (phoneCode: string) => void;
   setTotalShopCount: (totalShopCount: number) => void;
+  setIsNumberChecked: (isNumberChecked: boolean) => void;
+  setCurrentNumber: (currentNumber: string) => void;
+  setUser: (user: IUser) => void;
 };
 
 export const useCommonStore = create<CommonState & CommonActions>()(
   persist(
     (set) => ({
+      user: null,
+      setUser: (user: IUser) => {
+        set({ user });
+      },
       country_code: "88",
       setCountryCode: (country_code) => {
         set((state) => {
@@ -131,6 +141,14 @@ export const useCommonStore = create<CommonState & CommonActions>()(
 
       totalShopCount: 0,
       setTotalShopCount: (totalShopCount) => set({ totalShopCount }),
+      isNumberChecked: false,
+      setIsNumberChecked: (isNumberChecked: boolean) => {
+        set({ isNumberChecked });
+      },
+      currentNumber: null,
+      setCurrentNumber: (currentNumber: string) => {
+        set({ currentNumber });
+      },
     }),
     {
       name: "common-store", // localStorage key
@@ -139,6 +157,8 @@ export const useCommonStore = create<CommonState & CommonActions>()(
         phoneCode: state.phoneCode,
         geoInfo: state.geoInfo,
         totalShopCount: state.totalShopCount,
+        isNumberChecked: state.isNumberChecked,
+        user: state.user,
       }),
     },
   ),

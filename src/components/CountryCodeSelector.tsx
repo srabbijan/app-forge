@@ -59,7 +59,7 @@ export default function CountryCodeSelector() {
             <CommandInput placeholder="Search phone code..." />
             <CommandEmpty>No currency found.</CommandEmpty>
             <ScrollArea
-              className="h-[200px] overflow-y-scroll"
+              className="h-[600px] overflow-y-scroll"
               onWheel={handleWheel}
             >
               <CommandGroup>

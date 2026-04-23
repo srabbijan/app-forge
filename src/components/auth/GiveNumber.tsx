@@ -1,6 +1,9 @@
 import { validatePhoneNumber } from "@/constants/currency";
 import http from "@/services/http";
-import { useCurrentPhoneCode, useCurrentPhoneValidator } from "@/stores/store";
+import useCommonStore, {
+  useCurrentPhoneCode,
+  useCurrentPhoneValidator,
+} from "@/stores/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useMutation } from "@tanstack/react-query";
@@ -28,6 +31,10 @@ const GiveNumber = () => {
   //   const setCurrentNumber = useAuthStore((state) => state.setCurrentNumber);
   const validator = useCurrentPhoneValidator();
   const phoneCode = useCurrentPhoneCode();
+  const setIsNumberChecked = useCommonStore(
+    (state) => state.setIsNumberChecked,
+  );
+  const setCurrentNumber = useCommonStore((state) => state.setCurrentNumber);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,7 +61,8 @@ const GiveNumber = () => {
     const response = await checkNumber(mobile_number);
 
     if (response?.code === 200) {
-      void navigate("/pin");
+      setIsNumberChecked(true);
+      setCurrentNumber(mobile_number);
       return;
     } else if (response?.code === 400) {
       toast(response.message);
