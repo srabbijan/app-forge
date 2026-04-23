@@ -12,7 +12,8 @@ import {
   Smartphone,
   Zap,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 
 const features = [
   {
@@ -67,6 +68,12 @@ const steps = [
 
 const Landing = () => {
   const user = useUser();
+  const [searchParam] = useSearchParams();
+  const paramShopId = searchParam.get("shopId");
+
+  useEffect(() => {
+    if (paramShopId) return localStorage.setItem("paramShopId", paramShopId);
+  }, [paramShopId]);
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -116,7 +123,7 @@ const Landing = () => {
               }}
             >
               <Button asChild variant="hero" size="xl">
-                <Link to={user ? "/shop" : "/login"}>
+                <Link to={paramShopId ? "/builder" : user ? "/shop" : "/login"}>
                   Build your app{" "}
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-all duration-300" />
                 </Link>

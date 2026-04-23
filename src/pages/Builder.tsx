@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -101,7 +101,6 @@ const Builder = () => {
   const [color, setColor] = useState(COLOR_PRESETS[0].hsl);
   const [building, setBuilding] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-
   const store = JSON.parse(localStorage.getItem("common-store") ?? "{}");
   const shop_id = store?.state?.shopId;
 
@@ -116,11 +115,19 @@ const Builder = () => {
   const appName = form.watch("appName");
 
   useEffect(() => {
-    if (!shop_id) {
+    const paramShopId = localStorage.getItem("paramShopId");
+    // console.log(paramShopId);
+
+    if (!paramShopId && !shop_id) {
       navigate("/login");
       return;
     }
-    setShopId(shop_id);
+
+    if (paramShopId) {
+      setShopId(paramShopId);
+    } else {
+      setShopId(shop_id);
+    }
   }, [navigate, shop_id]);
 
   const handleIcon = (e: React.ChangeEvent<HTMLInputElement>) => {
