@@ -174,7 +174,7 @@ const Builder = () => {
               mail: values.email,
               shopId,
               appName: appNameSafe,
-              primaryColor,
+              primaryColor: `0xFF${primaryColor.toUpperCase()}`,
               splashUrl: splashUrl ?? "",
             },
           }),
