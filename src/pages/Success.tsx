@@ -84,7 +84,7 @@ const Success = () => {
             <span className="font-semibold text-foreground">
               {build.appName}
             </span>{" "}
-            is now being compiled. Builds typically take 10–15 minutes. We'll
+            is now being compiled. Builds typically take 3–5 minutes. We'll
             email the download link to{" "}
             <span className="font-semibold text-foreground">{userEmail}</span>{" "}
             when it's ready.
@@ -138,7 +138,7 @@ const Success = () => {
               {[
                 {
                   icon: GitBranch,
-                  text: "GitHub Actions picks up the build job and compiles your Android app",
+                  text: "Actions picks up the build job and compiles your Android app",
                 },
                 {
                   icon: Smartphone,
@@ -170,7 +170,7 @@ const Success = () => {
               </div>
               <div>
                 <p className="text-sm font-semibold">
-                  Check your inbox in ~15 minutes
+                  Check your inbox in ~5 minutes
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
                   Download link will be sent to{" "}

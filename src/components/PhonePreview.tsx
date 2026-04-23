@@ -35,7 +35,7 @@ const PRODUCTS = [
 const NAV_ITEMS = [
   { label: "Home", Icon: Home },
   { label: "Product", Icon: Layers },
-  { label: "Wishlist", Icon: Heart },
+  { label: "Wishlist", Icon: ShoppingCart },
   { label: "Profile", Icon: User },
 ];
 
@@ -80,7 +80,7 @@ export const PhonePreview = ({ appName, appIcon, primaryColor }: PhonePreviewPro
             </div>
             <div className="flex items-center gap-2">
               <Bell className="h-4 w-4 text-gray-600" />
-              <div className="relative">
+              {/* <div className="relative">
                 <ShoppingCart className="h-4 w-4 text-gray-600" />
                 <span
                   className="absolute -right-1.5 -top-1.5 flex h-3.5 w-3.5 items-center justify-center rounded-full text-[7px] font-bold text-white"
@@ -88,7 +88,7 @@ export const PhonePreview = ({ appName, appIcon, primaryColor }: PhonePreviewPro
                 >
                   2
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -155,7 +155,7 @@ export const PhonePreview = ({ appName, appIcon, primaryColor }: PhonePreviewPro
               <div className="mb-2 flex items-center justify-between">
                 <p className="text-xs font-bold text-gray-900">Featured</p>
                 <span className="text-[9px] font-semibold" style={{ color: accent }}>
-                  View All
+                  See All
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
