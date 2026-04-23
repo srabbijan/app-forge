@@ -1,4 +1,4 @@
-import appIcon from "@/assets/app-icon.png";
+import logo from "/hishabee.webp";
 
 interface LogoProps {
   className?: string;
@@ -7,9 +7,13 @@ interface LogoProps {
 export const Logo = ({ className = "" }: LogoProps) => {
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <img src={appIcon} alt="Hishabee" className="h-8 w-8 rounded-xl" />
-
-      <span className="text-lg font-bold tracking-tight">Hishabee</span>
+      <img
+        src={logo}
+        alt="Hishabee Logo"
+        className=""
+        width={150}
+        height={44}
+      />
     </div>
   );
 };

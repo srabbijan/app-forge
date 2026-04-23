@@ -3,37 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/src/assets/app-icon.png" />
     <title>Hishabee E-commerce</title>
-    <meta name="description" content="Generate your branded white-label e-commerce mobile app instantly. No code, no delays — launch in seconds." />
+    <meta
+      name="description"
+      content="Generate your branded white-label e-commerce mobile app instantly. No code, no delays — launch in seconds."
+    />
     <meta name="author" content="Hishabee" />
 
-    <meta property="og:title" content="Build Your E-commerce App in One Click" />
-    <meta property="og:description" content="No coding. No delays. Your branded mobile app, instantly." />
+    <meta
+      property="og:title"
+      content="Build Your E-commerce App in One Click"
+    />
+    <meta
+      property="og:description"
+      content="No coding. No delays. Your branded mobile app, instantly."
+    />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta property="og:image" content="/src/assets/app-icon.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@Lovable" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:image" content="/src/assets/app-icon.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
     <!-- SPA redirect handler for GitHub Pages 404.html -->
     <script>
-      (function(l) {
-        if (l.search[1] === '/') {
-          var decoded = l.search.slice(1).split('&').map(function(s) {
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-            l.pathname.slice(0, -1) + decoded + l.hash
+      (function (l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash,
           );
         }
-      }(window.location))
+      })(window.location);
     </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
