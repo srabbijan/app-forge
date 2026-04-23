@@ -20,12 +20,14 @@ import {
   Mail,
   Rocket,
   ShoppingBag,
+  Smartphone,
   Sparkles,
+  SlidersHorizontal,
   X,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -92,6 +94,7 @@ const formSchema = z.object({
 });
 
 type FormValues = z.infer<typeof formSchema>;
+type Tab = "details" | "preview";
 
 const Builder = () => {
   const navigate = useNavigate();
@@ -100,34 +103,25 @@ const Builder = () => {
   const [iconFile, setIconFile] = useState<File | undefined>();
   const [color, setColor] = useState(COLOR_PRESETS[0].hsl);
   const [building, setBuilding] = useState(false);
+  const [activeTab, setActiveTab] = useState<Tab>("details");
   const fileRef = useRef<HTMLInputElement>(null);
   const store = JSON.parse(localStorage.getItem("common-store") ?? "{}");
   const shop_id = store?.state?.shopId;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      appName: "",
-    },
+    defaultValues: { email: "", appName: "" },
   });
 
   const appName = form.watch("appName");
 
   useEffect(() => {
     const paramShopId = localStorage.getItem("paramShopId");
-    // console.log(paramShopId);
-
     if (!paramShopId && !shop_id) {
       navigate("/login");
       return;
     }
-
-    if (paramShopId) {
-      setShopId(paramShopId);
-    } else {
-      setShopId(shop_id);
-    }
+    setShopId(paramShopId ?? shop_id);
   }, [navigate, shop_id]);
 
   const handleIcon = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,7 +137,6 @@ const Builder = () => {
   const onSubmit = async (values: FormValues) => {
     setBuilding(true);
     try {
-      // 1. Upload icon if provided
       let splashUrl: string | null = null;
       if (iconFile) {
         splashUrl = await uploadSingleImage(iconFile);
@@ -154,13 +147,8 @@ const Builder = () => {
         }
       }
 
-      // 2. Sanitize app name for use in build scripts (alphanumeric + spaces only)
       const appNameSafe = values.appName.replace(/[^a-zA-Z0-9 ]/g, "").trim();
-
-      // 3. Convert HSL → HEX for Android (e.g. "FF6200EE")
       const primaryColor = hslToHex(color);
-
-      // 4. Trigger GitHub Actions workflow
 
       const response = await fetch(
         `https://app.hishabee.business/white-label/dispatch`,
@@ -168,7 +156,6 @@ const Builder = () => {
           method: "POST",
           headers: {
             Accept: "application/vnd.github+json",
-            // Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -181,15 +168,16 @@ const Builder = () => {
         },
       );
 
-      if (response.status !== 204) {
-        const text = await response.text();
-        console.error("Workflow dispatch failed:", text);
-        toast.error("Failed to trigger build, please try again");
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        const message =
+          data?.message ?? "Failed to trigger build, please try again";
+        console.error("Workflow dispatch failed:", data);
+        toast.error(message);
         setBuilding(false);
         return;
       }
 
-      // 5. Persist for success page
       sessionStorage.setItem("email", values.email);
       sessionStorage.setItem(
         "lastBuild",
@@ -212,10 +200,10 @@ const Builder = () => {
 
   return (
     <div className="relative min-h-screen bg-background">
-      {/* Top bar */}
+      {/* Header */}
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
         <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => navigate(-1)}
               className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-base hover:bg-secondary hover:text-foreground"
@@ -226,29 +214,46 @@ const Builder = () => {
             <Logo />
             <span className="hidden h-5 w-px bg-border sm:block" />
             <span className="hidden text-sm text-muted-foreground sm:block">
-              App builder
+              App Builder
             </span>
           </div>
           <div className="flex items-center gap-2 rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs">
             <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
-            <span className="text-muted-foreground">Connected to</span>
+            <span className="hidden text-muted-foreground sm:inline">
+              Connected to
+            </span>
             <span className="font-mono font-semibold">{shopId}</span>
           </div>
         </div>
       </header>
 
-      <main className="container py-10">
-        <div className="mb-8 max-w-2xl">
-          <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
-            <Sparkles className="h-3 w-3" /> Step 1 of 1
-          </div>
+      <main className="container py-8">
+        {/* Mobile tabs */}
+        <div className="mb-6 flex rounded-xl border border-border/60 bg-card p-1 lg:hidden">
+          <TabButton
+            active={activeTab === "details"}
+            onClick={() => setActiveTab("details")}
+            icon={<SlidersHorizontal className="h-3.5 w-3.5" />}
+            label="Details"
+          />
+          <TabButton
+            active={activeTab === "preview"}
+            onClick={() => setActiveTab("preview")}
+            icon={<Smartphone className="h-3.5 w-3.5" />}
+            label="Preview"
+          />
         </div>
 
         <Form {...form}>
           <form onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}>
-            <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
-              {/* FORM */}
-              <div className="space-y-6">
+            <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
+              {/* FORM — hidden on mobile when preview tab is active */}
+              <div
+                className={cn(
+                  "space-y-4",
+                  activeTab === "preview" && "hidden lg:block",
+                )}
+              >
                 {/* Email */}
                 <FormField
                   control={form.control}
@@ -282,7 +287,7 @@ const Builder = () => {
                   control={form.control}
                   name="appName"
                   render={({ field }) => (
-                    <FieldCard label="App name" hint="This appears on app icon">
+                    <FieldCard label="App name" hint="Appears below the icon">
                       <FormItem>
                         <FormLabel className="sr-only">App name</FormLabel>
                         <FormControl>
@@ -305,10 +310,7 @@ const Builder = () => {
                 />
 
                 {/* Icon */}
-                <FieldCard
-                  label="App icon"
-                  hint="Square image, at least 512×512px"
-                >
+                <FieldCard label="App icon" hint="Square, at least 512×512 px">
                   <input
                     ref={fileRef}
                     type="file"
@@ -317,7 +319,6 @@ const Builder = () => {
                     onChange={handleIcon}
                   />
                   <div className="flex items-center gap-4">
-                    {/* Preview thumbnail */}
                     <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-border bg-secondary/40">
                       {appIcon ? (
                         <>
@@ -358,7 +359,7 @@ const Builder = () => {
                 {/* Color */}
                 <FieldCard
                   label="Primary color"
-                  hint="The accent used across your app"
+                  hint="Accent used across your app"
                 >
                   <div className="flex flex-wrap items-center gap-2.5">
                     {COLOR_PRESETS.map((preset) => {
@@ -370,7 +371,7 @@ const Builder = () => {
                           onClick={() => setColor(preset.hsl)}
                           title={preset.name}
                           className={cn(
-                            "h-10 w-10 rounded-full border-2 transition-bounce hover:scale-110",
+                            "h-9 w-9 rounded-full border-2 transition-bounce hover:scale-110",
                             active
                               ? "border-foreground ring-4 ring-foreground/10"
                               : "border-transparent",
@@ -380,31 +381,36 @@ const Builder = () => {
                         />
                       );
                     })}
-                    <label className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-dashed border-border transition-base hover:border-foreground">
+                    <label className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-2 border-dashed border-border transition-base hover:border-foreground">
                       <input
                         type="color"
                         onChange={(e) => setColor(hexToHsl(e.target.value))}
                         className="absolute inset-0 cursor-pointer opacity-0"
                         aria-label="Custom color"
                       />
-                      <span className="text-xs">+</span>
+                      <span className="text-xs font-semibold">+</span>
                     </label>
                   </div>
                 </FieldCard>
 
                 {/* Build CTA */}
-                <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-card to-secondary/40 p-6">
+                <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-card to-secondary/40 p-5">
+                  <p className="text-sm font-semibold">Ready to build?</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    Your APK will be compiled and sent to your email within
+                    minutes.
+                  </p>
                   <Button
                     type="submit"
                     variant="hero"
                     size="xl"
-                    className="mt-5 w-full"
+                    className="mt-4 w-full"
                     disabled={building}
                   >
                     {building ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        Your app is being built... 🚀
+                        Building your app…
                       </>
                     ) : (
                       <>
@@ -415,12 +421,17 @@ const Builder = () => {
                 </div>
               </div>
 
-              {/* PREVIEW */}
-              <div className="lg:sticky lg:top-24 lg:self-start space-y-6">
-                {/* App Icon Preview */}
-                <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-secondary/60 via-card to-accent/40 p-6">
-                  <p className="mb-4 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    App Icon Preview
+              {/* PREVIEW — hidden on mobile when details tab is active */}
+              <div
+                className={cn(
+                  "space-y-5 lg:sticky lg:top-24 lg:self-start",
+                  activeTab === "details" && "hidden lg:block",
+                )}
+              >
+                {/* App icon chip */}
+                <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-secondary/60 via-card to-accent/40 p-5">
+                  <p className="mb-4 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    App Icon
                   </p>
                   <div className="flex justify-center">
                     <div className="flex flex-col items-center gap-2">
@@ -449,7 +460,7 @@ const Builder = () => {
                   </div>
                 </div>
 
-                {/* Phone Preview */}
+                {/* Phone preview */}
                 <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-secondary/60 via-card to-accent/40 p-8 sm:p-12">
                   <div className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-card/80 px-3 py-1 text-xs font-medium backdrop-blur-md">
                     <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
@@ -463,6 +474,34 @@ const Builder = () => {
                     />
                   </div>
                 </div>
+
+                {/* Mobile: build button shortcut in preview tab */}
+                <div className="lg:hidden">
+                  <Button
+                    type="submit"
+                    variant="hero"
+                    size="xl"
+                    className="w-full"
+                    disabled={building}
+                    onClick={() => {
+                      form.handleSubmit(onSubmit, () => {
+                        // validation failed — take user to where the errors are
+                        setActiveTab("details");
+                      })();
+                    }}
+                  >
+                    {building ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Building your app…
+                      </>
+                    ) : (
+                      <>
+                        Build app <Rocket className="h-4 w-4" />
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
           </form>
@@ -471,6 +510,32 @@ const Builder = () => {
     </div>
   );
 };
+
+const TabButton = ({
+  active,
+  onClick,
+  icon,
+  label,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={cn(
+      "flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-semibold transition-all",
+      active
+        ? "bg-primary text-primary-foreground shadow-sm"
+        : "text-muted-foreground hover:text-foreground",
+    )}
+  >
+    {icon}
+    {label}
+  </button>
+);
 
 const FieldCard = ({
   label,
