@@ -126,6 +126,27 @@
   html {
     scroll-behavior: smooth;
   }
+  /* Firefox scrollbar style  */
+  * {
+    scrollbar-width: 0.2rem;
+    scrollbar-color: #aaa9a9 transparent;
+  }
+
+  .scroll_hidden::-webkit-scrollbar {
+    width: 0;
+    scroll-behavior: smooth;
+  }
+
+  input:-webkit-autofill {
+    background: transparent !important;
+  }
+
+  /* Hide the up and down arrows */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 @layer utilities {
