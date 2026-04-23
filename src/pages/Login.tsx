@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2, Lock, Phone } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Login = () => {
@@ -20,7 +20,10 @@ const Login = () => {
     setLoading(true);
     setTimeout(() => {
       // Mock shopId from "API"
-      sessionStorage.setItem("shopId", "SHOP_" + Math.random().toString(36).slice(2, 8).toUpperCase());
+      sessionStorage.setItem(
+        "shopId",
+        "SHOP_" + Math.random().toString(36).slice(2, 8).toUpperCase(),
+      );
       sessionStorage.setItem("phone", phone);
       toast.success("Welcome back! 👋");
       navigate("/builder");
@@ -33,14 +36,13 @@ const Login = () => {
       <div className="absolute inset-0 bg-gradient-mesh" />
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/15 blur-[120px]" />
 
-      <Link
-        to="/"
-        className="absolute left-6 top-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-base hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" /> Back
-      </Link>
-
       <div className="relative w-full max-w-md animate-scale-in">
+        <Link
+          to="/"
+          className="absolute top-3 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-base hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" /> Back
+        </Link>
         <div className="mb-8 flex justify-center">
           <Logo />
         </div>
@@ -66,7 +68,9 @@ const Login = () => {
                   inputMode="tel"
                   autoComplete="tel"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/[^\d+\s]/g, ""))}
+                  onChange={(e) =>
+                    setPhone(e.target.value.replace(/[^\d+\s]/g, ""))
+                  }
                   placeholder="0123456789"
                   className="h-12 w-full rounded-xl border border-input bg-background pl-11 pr-4 text-base outline-none transition-base placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/15"
                 />
@@ -85,14 +89,22 @@ const Login = () => {
                   inputMode="numeric"
                   maxLength={5}
                   value={pin}
-                  onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 5))}
+                  onChange={(e) =>
+                    setPin(e.target.value.replace(/\D/g, "").slice(0, 5))
+                  }
                   placeholder="•••••"
                   className="h-12 w-full rounded-xl border border-input bg-background pl-11 pr-4 text-base outline-none transition-base placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/15"
                 />
               </div>
             </div>
 
-            <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
+            <Button
+              type="submit"
+              variant="hero"
+              size="lg"
+              className="w-full"
+              disabled={loading}
+            >
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" /> Signing in...
@@ -101,10 +113,8 @@ const Login = () => {
                 "Continue"
               )}
             </Button>
-
           </form>
         </div>
-
       </div>
     </div>
   );

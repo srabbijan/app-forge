@@ -1,8 +1,8 @@
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Logo } from "./Logo";
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -19,7 +19,9 @@ export const Navbar = () => {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-smooth",
-        scrolled ? "border-b border-border/60 bg-background/80 backdrop-blur-xl" : "bg-transparent"
+        scrolled
+          ? "border-b border-border/60 bg-background/80 backdrop-blur-xl"
+          : "bg-transparent",
       )}
     >
       <div className="container flex h-16 items-center justify-between">
@@ -28,16 +30,21 @@ export const Navbar = () => {
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
-          <a href="#features" className="text-sm font-medium text-muted-foreground transition-base hover:text-foreground">
+          <a
+            href="#features"
+            className="text-sm font-medium text-muted-foreground transition-base hover:text-foreground"
+          >
             Features
           </a>
-          <a href="#how" className="text-sm font-medium text-muted-foreground transition-base hover:text-foreground">
+          <a
+            href="#how"
+            className="text-sm font-medium text-muted-foreground transition-base hover:text-foreground"
+          >
             How it works
           </a>
         </nav>
 
         <div className="flex items-center gap-2">
-          
           <Button asChild variant="hero" size="sm">
             <Link to="/login">Build your app</Link>
           </Button>
