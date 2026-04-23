@@ -2,12 +2,18 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/stores/store";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Logo } from "./Logo";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const user = useUser();
+  const [searchParam] = useSearchParams();
+  const paramShopId = searchParam.get("shopId");
+
+  useEffect(() => {
+    if (paramShopId) return localStorage.setItem("paramShopId", paramShopId);
+  }, [paramShopId]);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 12);
@@ -47,7 +53,9 @@ export const Navbar = () => {
 
         <div className="flex items-center gap-2">
           <Button asChild variant="hero" size="sm">
-            <Link to={user ? "/shop" : "/login"}>Build your app</Link>
+            <Link to={paramShopId ? "/builder" : user ? "/shop" : "/login"}>
+              Build your app
+            </Link>
           </Button>
         </div>
       </div>
