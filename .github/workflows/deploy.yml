@@ -34,6 +34,10 @@ jobs:
         env:
           VITE_BASE_PATH: /${{ github.event.repository.name }}/
           VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          VITE_GH_TOKEN: ${{ secrets.VITE_GH_TOKEN }}
+          VITE_GH_REPO_OWNER: ${{ vars.VITE_GH_REPO_OWNER }}
+          VITE_GH_REPO_NAME: ${{ vars.VITE_GH_REPO_NAME }}
+          VITE_GH_BRANCH: ${{ vars.VITE_GH_BRANCH }}
         run: npm run build
 
       - name: Upload artifact

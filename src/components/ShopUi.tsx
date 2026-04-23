@@ -1,15 +1,110 @@
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import useCommonStore from "@/stores/store";
 import type { IShop, IShopMain } from "@/types/shop";
-import { Loader2 } from "lucide-react";
+import {
+  ExternalLink,
+  Loader2,
+  Lock,
+  Smartphone,
+  Sparkles,
+  Zap,
+} from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import BeeLoader from "./common/BeeLoader";
 import BrandingLogo from "./common/BrandingLogo";
 import { CopyRight } from "./common/CopyRight";
 import { PageSubTitle, Text } from "./common/Text";
 import { Card } from "./ui/card";
+import defaultShop from "/shop_view.svg";
+
+const SUBSCRIPTION_URL = "https://web.hishabee.business/";
+
+const PaywallDialog = ({
+  shop,
+  open,
+  onClose,
+}: {
+  shop: IShop | null;
+  open: boolean;
+  onClose: () => void;
+}) => (
+  <Dialog open={open} onOpenChange={onClose}>
+    <DialogContent className="max-w-md overflow-hidden p-0">
+      {/* Brand header */}
+      <div className="bg-gradient-primary px-6 pb-6 pt-8 text-center">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-black/10 backdrop-blur-sm">
+          <Lock className="h-7 w-7 text-primary-foreground" />
+        </div>
+        <DialogTitle className="text-xl font-extrabold text-primary-foreground">
+          Advanced Plan Required
+        </DialogTitle>
+        <DialogDescription className="mt-1.5 text-sm text-primary-foreground/80">
+          {shop?.name
+            ? `"${shop.name}" needs an Active Advanced subscription to build an app.`
+            : "This shop needs an Active Advanced subscription to build an app."}
+        </DialogDescription>
+      </div>
+
+      {/* Body */}
+      <div className="space-y-4 p-6">
+        <p className="text-sm text-muted-foreground">
+          App building is available exclusively on the Advanced plan. Here's how
+          to get started:
+        </p>
+
+        <div className="space-y-3">
+          {[
+            {
+              icon: Smartphone,
+              title: "Go to Hishabee web",
+              desc: "Open your shop dashboard at web.hishabee.business",
+            },
+            {
+              icon: Zap,
+              title: "Upgrade to Advanced",
+              desc: 'Navigate to Subscription and select the "Advanced" plan',
+            },
+            {
+              icon: Sparkles,
+              title: "Come back and build",
+              desc: "Once upgraded, select this shop and build your app",
+            },
+          ].map(({ icon: Icon, title, desc }, i) => (
+            <div key={i} className="flex items-start gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent">
+                <Icon className="h-4 w-4 text-accent-foreground" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold">{title}</p>
+                <p className="text-xs text-muted-foreground">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex gap-3 pt-2">
+          <Button variant="outline" className="flex-1" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            className="flex-1 bg-gradient-primary font-semibold text-primary-foreground hover:opacity-90"
+            onClick={() => window.open(SUBSCRIPTION_URL, "_blank")}
+          >
+            Upgrade now
+            <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
+          </Button>
+        </div>
+      </div>
+    </DialogContent>
+  </Dialog>
+);
 
 const ShopUi = ({
   shops,
@@ -22,15 +117,15 @@ const ShopUi = ({
   const setCurrentShop = useCommonStore((state) => state.setCurrentShop);
   const currentShop = useCommonStore((state) => state.currentShop);
   const [loading, setLoading] = useState(false);
-  console.log({ shops });
+  const [paywallShop, setPaywallShop] = useState<IShop | null>(null);
 
   const setTotalShopCount = useCommonStore((state) => state.setTotalShopCount);
 
   const handleContinue = (shop: IShop) => {
-    if (shop.package !== "ADVANCED")
-      return toast.warning(
-        "You have to buy subscription for this Shop to Build your App",
-      );
+    if (shop.package !== "ADVANCED") {
+      setPaywallShop(shop);
+      return;
+    }
     setLoading(true);
     setTotalShopCount(shops.length);
     const shopData = {
@@ -55,7 +150,7 @@ const ShopUi = ({
   if (isLoading) {
     return (
       <div className="h-[700px] w-full flex items-center justify-center">
-        <Loader2 className="h-16 w-16 animate-spin text-primary dark:text-primary-40" />{" "}
+        <Loader2 className="h-16 w-16 animate-spin text-primary dark:text-primary-40" />
       </div>
     );
   }
@@ -63,6 +158,11 @@ const ShopUi = ({
   return (
     <div className="space-y-4 max-7xl mx-auto flex flex-col items-center justify-center py-8">
       {loading && <BeeLoader />}
+      <PaywallDialog
+        shop={paywallShop}
+        open={!!paywallShop}
+        onClose={() => setPaywallShop(null)}
+      />
       <BrandingLogo />
       <PageSubTitle title={"Choose your Shop"} />
       <div className="gap-4 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3">
@@ -78,7 +178,7 @@ const ShopUi = ({
                 src={
                   shop?.logo_url && shop?.logo_url !== "undefined"
                     ? shop?.logo_url
-                    : `/shop_view.svg`
+                    : defaultShop
                 }
                 alt={shop?.name}
                 height={84}
