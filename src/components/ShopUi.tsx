@@ -4,6 +4,7 @@ import type { IShop, IShopMain } from "@/types/shop";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import BeeLoader from "./common/BeeLoader";
 import BrandingLogo from "./common/BrandingLogo";
 import { CopyRight } from "./common/CopyRight";
@@ -26,6 +27,10 @@ const ShopUi = ({
   const setTotalShopCount = useCommonStore((state) => state.setTotalShopCount);
 
   const handleContinue = (shop: IShop) => {
+    if (shop.package !== "ADVANCED")
+      return toast.warning(
+        "You have to buy subscription for this Shop to Build your App",
+      );
     setLoading(true);
     setTotalShopCount(shops.length);
     const shopData = {
