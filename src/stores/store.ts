@@ -86,6 +86,7 @@ export const useCommonStore = create<CommonState & CommonActions>()(
           user: null,
           token: null,
           currentNumber: null,
+          isNumberChecked: false,
         });
       },
       currentShop: null,
@@ -206,6 +207,8 @@ export const useCommonStore = create<CommonState & CommonActions>()(
         totalShopCount: state.totalShopCount,
         isNumberChecked: state.isNumberChecked,
         user: state.user,
+        token: state.token,
+        currentNumber: state.currentNumber,
         shopId: state.currentShopId,
       }),
     },

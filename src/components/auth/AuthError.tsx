@@ -10,7 +10,7 @@ function AuthError() {
   }, []);
 
   const handleRetry = () => {
-    void navigate("/auth/login");
+    void navigate("/login");
   };
 
   const handleGoHome = () => {
@@ -18,7 +18,7 @@ function AuthError() {
   };
 
   return (
-    <div className=" py-16 bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center p-4">
+    <div className="h-screen py-16 bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center p-4">
       <div
         className={`max-w-md w-full text-center transform transition-all duration-700 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
