@@ -1,9 +1,11 @@
+import { LanguageToggle } from "@/components/common/LanguageToggle";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
+import confetti from "canvas-confetti";
 import { Check, GitBranch, Mail, Smartphone, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import confetti from "canvas-confetti";
 
 interface BuildInfo {
   shopId: string;
@@ -16,6 +18,7 @@ interface BuildInfo {
 
 const Success = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [build, setBuild] = useState<BuildInfo | null>(null);
 
   useEffect(() => {
@@ -56,6 +59,7 @@ const Success = () => {
           <Link to="/">
             <Logo />
           </Link>
+          <LanguageToggle />
         </div>
       </header>
 
@@ -71,23 +75,24 @@ const Success = () => {
           </div>
 
           <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground animate-fade-in">
-            <Sparkles className="h-3 w-3" /> Build triggered
+            <Sparkles className="h-3 w-3" /> {t("success.buildTriggered")}
           </p>
 
           <h1 className="text-balance text-4xl font-extrabold tracking-tight sm:text-5xl animate-fade-in-up">
-            You're all set!
+            {t("success.title")}
           </h1>
           <p
             className="mx-auto mt-4 max-w-md text-muted-foreground animate-fade-in-up"
             style={{ animationDelay: "120ms", animationFillMode: "backwards" }}
           >
-            <span className="font-semibold text-foreground">
-              {build.appName}
-            </span>{" "}
-            is now being compiled. Builds typically take 3–5 minutes. We'll
-            email the download link to{" "}
-            <span className="font-semibold text-foreground">{userEmail}</span>{" "}
-            when it's ready.
+            <Trans
+              i18nKey="success.description"
+              values={{ appName: build.appName, userEmail }}
+              components={[
+                <span className="font-semibold text-foreground" key="0" />,
+                <span className="font-semibold text-foreground" key="1" />,
+              ]}
+            />
           </p>
 
           {/* App card */}
@@ -115,12 +120,12 @@ const Success = () => {
               <div className="min-w-0 flex-1 text-left">
                 <h3 className="truncate text-lg font-bold">{build.appName}</h3>
                 <p className="font-mono text-xs text-muted-foreground">
-                  Shop #{build.shopId}
+                  {t("success.shop", { id: build.shopId })}
                 </p>
               </div>
               <div className="flex items-center gap-1.5 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-500">
                 <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-                Building
+                {t("success.building")}
               </div>
             </div>
           </div>
@@ -132,21 +137,23 @@ const Success = () => {
           >
             <div className="mb-4 flex items-center gap-2">
               <GitBranch className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-semibold">What happens next</span>
+              <span className="text-sm font-semibold">
+                {t("success.nextSteps.title")}
+              </span>
             </div>
             <div className="space-y-4">
               {[
                 {
                   icon: GitBranch,
-                  text: "Actions picks up the build job and compiles your Android app",
+                  text: t("success.nextSteps.step1"),
                 },
                 {
                   icon: Smartphone,
-                  text: "An APK is generated and signed with your shop's configuration",
+                  text: t("success.nextSteps.step2"),
                 },
                 {
                   icon: Mail,
-                  text: `A download link is emailed to ${userEmail}`,
+                  text: t("success.nextSteps.step3", { email: userEmail }),
                 },
               ].map(({ icon: Icon, text }, i) => (
                 <div key={i} className="flex items-start gap-3">
@@ -170,21 +177,23 @@ const Success = () => {
               </div>
               <div>
                 <p className="text-sm font-semibold">
-                  Check your inbox in ~5 minutes
+                  {t("success.emailReminder.title")}
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Download link will be sent to{" "}
-                  <span className="font-medium text-foreground">
-                    {userEmail}
-                  </span>
-                  . Check spam if you don't see it.
+                  <Trans
+                    i18nKey="success.emailReminder.desc"
+                    values={{ email: userEmail }}
+                    components={[
+                      <span className="font-medium text-foreground" key="0" />,
+                    ]}
+                  />
                 </p>
               </div>
             </div>
           </div>
 
           <Button asChild variant="ghost" className="mt-10">
-            <Link to="/builder">← Build another app</Link>
+            <Link to="/builder">{t("success.buildAnother")}</Link>
           </Button>
         </div>
       </main>

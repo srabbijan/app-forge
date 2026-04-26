@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -27,6 +28,7 @@ const formSchema = z.object({
 
 const GiveNumber = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   //   const setCurrentNumber = useAuthStore((state) => state.setCurrentNumber);
   const validator = useCurrentPhoneValidator();
@@ -85,7 +87,7 @@ const GiveNumber = () => {
             render={({ field }) => (
               <InputPhoneNumber
                 field={field}
-                label={"PHONE NUMBER"}
+                label={t("login.phoneNumber")}
                 isRequired
                 initialBlur={false}
               />
@@ -96,7 +98,7 @@ const GiveNumber = () => {
 
           <Button type="submit" className="w-full p-6">
             {isPending && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-            Next
+            {t("common.next")}
           </Button>
         </form>
       </Form>

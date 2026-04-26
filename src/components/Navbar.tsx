@@ -2,14 +2,17 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/stores/store";
 import { useEffect, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Link, useSearchParams } from "react-router-dom";
 import { Logo } from "./Logo";
+import { LanguageToggle } from "./common/LanguageToggle";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const user = useUser();
   const [searchParam] = useSearchParams();
   const paramShopId = searchParam.get("shopId");
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (paramShopId) return localStorage.setItem("paramShopId", paramShopId);
@@ -41,20 +44,21 @@ export const Navbar = () => {
             href="#features"
             className="text-sm font-medium text-muted-foreground transition-base hover:text-foreground"
           >
-            Features
+            {t("nav.features")}
           </a>
           <a
             href="#how"
             className="text-sm font-medium text-muted-foreground transition-base hover:text-foreground"
           >
-            How it works
+            {t("nav.howItWorks")}
           </a>
         </nav>
 
         <div className="flex items-center gap-2">
+          <LanguageToggle />
           <Button asChild variant="hero" size="sm">
             <Link to={paramShopId ? "/builder" : user ? "/shop" : "/login"}>
-              Build your app
+              {t("nav.buildApp")}
             </Link>
           </Button>
         </div>

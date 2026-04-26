@@ -5,71 +5,91 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@/stores/store";
 import {
   ArrowRight,
-  Code2,
+  Building2Icon,
+  CircleUserRound,
+  CreditCard,
+  FileText,
+  LogIn,
+  MessageCircleMore,
+  Package,
   Palette,
-  Rocket,
-  ShieldCheck,
-  Smartphone,
-  Zap,
+  Store,
 } from "lucide-react";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
-
-const features = [
-  {
-    icon: Zap,
-    title: "Instant build",
-    desc: "From form submit to download in under 60 seconds.",
-  },
-  {
-    icon: Palette,
-    title: "Pixel-perfect branding",
-    desc: "Your colors, your logo.",
-  },
-  {
-    icon: Smartphone,
-    title: "Android",
-    desc: "Native apps generated for both stores.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Offline first",
-    desc: "Customers shop even without internet. Auto-sync later.",
-  },
-  {
-    icon: Rocket,
-    title: "Push notifications",
-    desc: "Drive sales with built-in campaign tooling.",
-  },
-  {
-    icon: Code2,
-    title: "No code required",
-    desc: "Skip developers. Skip delays. Just ship.",
-  },
-];
-
-const steps = [
-  {
-    n: "01",
-    title: "Sign in",
-    desc: "Secure phone + PIN — no passwords to remember.",
-  },
-  {
-    n: "02",
-    title: "Customize",
-    desc: "Set your name, icon, and brand color. See it live.",
-  },
-  {
-    n: "03",
-    title: "Build",
-    desc: "One click. We compile, sign, and deliver your app.",
-  },
-];
 
 const Landing = () => {
   const user = useUser();
   const [searchParam] = useSearchParams();
   const paramShopId = searchParam.get("shopId");
+  const { t } = useTranslation();
+
+  const features = [
+    {
+      icon: Store,
+      title: t("landing.features.items.store.title"),
+      desc: t("landing.features.items.store.desc"),
+      iconBg: "bg-sky-100",
+      iconColor: "text-sky-600",
+    },
+    {
+      icon: Palette,
+      title: t("landing.features.items.theme.title"),
+      desc: t("landing.features.items.theme.desc"),
+      iconBg: "bg-pink-100",
+      iconColor: "text-pink-600",
+    },
+    {
+      icon: Package,
+      title: t("landing.features.items.products.title"),
+      desc: t("landing.features.items.products.desc"),
+      iconBg: "bg-emerald-100",
+      iconColor: "text-emerald-600",
+    },
+    {
+      icon: CreditCard,
+      title: t("landing.features.items.payment.title"),
+      desc: t("landing.features.items.payment.desc"),
+      iconBg: "bg-violet-100",
+      iconColor: "text-violet-600",
+    },
+    {
+      icon: MessageCircleMore,
+      title: t("landing.features.items.chat.title"),
+      desc: t("landing.features.items.chat.desc"),
+      iconBg: "bg-amber-100",
+      iconColor: "text-amber-600",
+    },
+    {
+      icon: CircleUserRound,
+      title: t("landing.features.items.profile.title"),
+      desc: t("landing.features.items.profile.desc"),
+      iconBg: "bg-rose-100",
+      iconColor: "text-rose-600",
+    },
+  ];
+
+  const tutorialSteps = [
+    {
+      number: "1",
+      icon: LogIn,
+      title: t("landing.howItWorks.steps.signIn.title"),
+      description: t("landing.howItWorks.steps.signIn.desc"),
+    },
+    {
+      number: "2",
+      icon: FileText,
+      title: t("landing.howItWorks.steps.customize.title"),
+      description: t("landing.howItWorks.steps.customize.desc"),
+    },
+    {
+      number: "3",
+      icon: Building2Icon,
+      title: t("landing.howItWorks.steps.build.title"),
+      description: t("landing.howItWorks.steps.build.desc"),
+    },
+  ];
 
   useEffect(() => {
     if (paramShopId) return localStorage.setItem("paramShopId", paramShopId);
@@ -94,15 +114,14 @@ const Landing = () => {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
               </span>
-              <span className="text-muted-foreground">New</span>
-              <span className="font-semibold">
-                v2.0 — Live preview & instant builds
-              </span>
+              <span className="text-muted-foreground">{t("landing.new")}</span>
+              <span className="font-semibold">{t("landing.version")}</span>
             </div>
 
             <h1 className="animate-fade-in-up text-balance text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
-              Build Your Own{" "}
-              <span className="text-gradient">E-commerce App</span> in One Click
+              {t("landing.hero.title1")}{" "}
+              <span className="text-gradient">{t("landing.hero.title2")}</span>{" "}
+              {t("landing.hero.title3")}
             </h1>
 
             <p
@@ -112,7 +131,7 @@ const Landing = () => {
                 animationFillMode: "backwards",
               }}
             >
-              No coding. No delays. Your branded mobile app, instantly.
+              {t("landing.hero.subtitle")}
             </p>
 
             <div
@@ -124,7 +143,7 @@ const Landing = () => {
             >
               <Button asChild variant="hero" size="xl">
                 <Link to={paramShopId ? "/builder" : user ? "/shop" : "/login"}>
-                  Build your app{" "}
+                  {t("landing.hero.cta")}{" "}
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-all duration-300" />
                 </Link>
               </Button>
@@ -144,37 +163,34 @@ const Landing = () => {
       {/* FEATURES */}
       <section
         id="features"
-        className="relative border-t border-border/60 py-24"
+        className="relative border-t border-border/50 bg-[#f8f6ef] py-24"
       >
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">
-              Features
-            </p>
-            <h2 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl">
-              Everything you need to launch
+            <h2 className="text-balance text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
+              {t("landing.features.title")}
             </h2>
-            <p className="mt-4 text-muted-foreground">
-              A complete toolkit for going from idea to App Store — without
-              writing a single line of code.
+            <p className="mt-4 text-base text-muted-foreground sm:text-lg">
+              {t("landing.features.subtitle")}
             </p>
           </div>
 
-          <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f, i) => (
               <div
                 key={f.title}
-                className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 transition-smooth hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
+                className="group rounded-3xl border border-border/60 bg-background px-6 py-9 text-center transition-smooth hover:-translate-y-1 hover:shadow-lg"
                 style={{ animationDelay: `${i * 60}ms` }}
               >
-                <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/5 blur-2xl transition-smooth group-hover:bg-primary/15" />
-                <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-accent text-accent-foreground">
-                  <f.icon className="h-5 w-5" />
+                <div
+                  className={`mx-auto flex h-16 w-16 items-center justify-center rounded-full ${f.iconBg}`}
+                >
+                  <f.icon className={`h-7 w-7 ${f.iconColor}`} />
                 </div>
-                <h3 className="relative mt-5 text-lg font-semibold">
+                <h3 className="mt-7 text-2xl font-extrabold leading-snug text-foreground">
                   {f.title}
                 </h3>
-                <p className="relative mt-1.5 text-sm text-muted-foreground">
+                <p className="mx-auto mt-4 max-w-[34ch] text-base leading-relaxed text-muted-foreground">
                   {f.desc}
                 </p>
               </div>
@@ -188,27 +204,40 @@ const Landing = () => {
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
             <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">
-              How it works
+              {t("landing.howItWorks.label")}
             </p>
             <h2 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl">
-              Three steps. Sixty seconds.
+              {t("landing.howItWorks.title")}
             </h2>
           </div>
 
-          <div className="mt-16 grid gap-6 md:grid-cols-3">
-            {steps.map((s, i) => (
-              <div
-                key={s.n}
-                className="relative rounded-2xl border border-border/60 bg-card p-8"
-              >
-                <span className="text-5xl font-extrabold text-gradient">
-                  {s.n}
-                </span>
-                <h3 className="mt-4 text-xl font-semibold">{s.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
-                {i < steps.length - 1 && (
-                  <ArrowRight className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-muted-foreground/40 md:block" />
+          <div className="grid md:grid-cols-3 gap-8 mt-16">
+            {tutorialSteps.map((step, index) => (
+              <div key={step.number} className="relative group">
+                {index < tutorialSteps.length - 1 && (
+                  <div className="hidden md:flex absolute top-1/2 left-full right-0 w-full items-center justify-center -translate-x-[46%] z-10">
+                    <ArrowRight className="w-10 h-10 text-primary" />
+                  </div>
                 )}
+                <article
+                  className="bg-card border-2 border-border rounded-xl p-6 relative hover:shadow-yellow hover:border-primary transition-all animate-fade-in"
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                >
+                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-14 h-14 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-2xl font-bold shadow-yellow">
+                    {step.number}
+                  </div>
+                  <div className="mt-8">
+                    <div className="bg-primary/10 w-16 h-16 rounded-lg flex items-center justify-center mb-4 mx-auto group-hover:rotate-12 transition-transform">
+                      <step.icon className="w-8 h-8 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-bold mb-3 text-center">
+                      {step.title}
+                    </h3>
+                    <p className="text-xs md:text-sm text-muted-foreground text-center">
+                      {step.description}
+                    </p>
+                  </div>
+                </article>
               </div>
             ))}
           </div>
@@ -217,25 +246,27 @@ const Landing = () => {
 
       <footer className="border-t border-border/60 py-10">
         <div className="container flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
-          <p>© {new Date().getFullYear()} Hishabee. Build apps in seconds.</p>
+          <p>
+            {t("landing.footer.copyright", { year: new Date().getFullYear() })}
+          </p>
           <div className="flex gap-6">
             <a
               href="https://app.hishabee.business/privacy-policy"
               className="hover:text-foreground transition-base"
             >
-              Privacy
+              {t("landing.footer.privacy")}
             </a>
             <a
               href="https://app.hishabee.business/general-terms-of-use"
               className="hover:text-foreground transition-base"
             >
-              Terms
+              {t("landing.footer.terms")}
             </a>
             <a
               href="https://www.hishabee.io/"
               className="hover:text-foreground transition-base"
             >
-              Contact
+              {t("landing.footer.contact")}
             </a>
           </div>
         </div>

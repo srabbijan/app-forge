@@ -208,6 +208,7 @@ export const useCommonStore = create<CommonState & CommonActions>()(
         isNumberChecked: state.isNumberChecked,
         user: state.user,
         token: state.token,
+        geoInfo: state.geoInfo,
         currentNumber: state.currentNumber,
         shopId: state.currentShopId,
       }),
