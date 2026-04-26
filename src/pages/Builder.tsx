@@ -20,13 +20,13 @@ import {
   Mail,
   Rocket,
   ShoppingBag,
-  Smartphone,
-  Sparkles,
   SlidersHorizontal,
+  Smartphone,
   X,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -88,9 +88,12 @@ const hexToHsl = (hex: string): string => {
 const formSchema = z.object({
   email: z
     .string()
-    .min(1, { message: "Email is required" })
-    .email({ message: "Enter a valid email address" }),
-  appName: z.string().min(1, { message: "Give your app a name" }).max(30),
+    .min(1, { message: "builder.form.emailRequired" })
+    .email({ message: "builder.form.emailInvalid" }),
+  appName: z
+    .string()
+    .min(1, { message: "builder.form.appNameRequired" })
+    .max(30),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -98,6 +101,7 @@ type Tab = "details" | "preview";
 
 const Builder = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [shopId, setShopId] = useState("");
   const [appIcon, setAppIcon] = useState<string | undefined>();
   const [iconFile, setIconFile] = useState<File | undefined>();
@@ -127,7 +131,8 @@ const Builder = () => {
   const handleIcon = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) return toast.error("Max icon size: 2MB");
+    if (file.size > 2 * 1024 * 1024)
+      return toast.error(t("builder.errors.maxIconSize"));
     setIconFile(file);
     const reader = new FileReader();
     reader.onload = (ev) => setAppIcon(ev.target?.result as string);
@@ -141,7 +146,7 @@ const Builder = () => {
       if (iconFile) {
         splashUrl = await uploadSingleImage(iconFile);
         if (!splashUrl) {
-          toast.error("Icon upload failed, please try again");
+          toast.error(t("builder.errors.iconUploadFailed"));
           setBuilding(false);
           return;
         }
@@ -170,8 +175,7 @@ const Builder = () => {
 
       if (!response.ok) {
         const data = await response.json().catch(() => null);
-        const message =
-          data?.message ?? "Failed to trigger build, please try again";
+        const message = data?.message ?? t("builder.errors.buildFailed");
         console.error("Workflow dispatch failed:", data);
         toast.error(message);
         setBuilding(false);
@@ -193,7 +197,7 @@ const Builder = () => {
 
       navigate("/success");
     } catch {
-      toast.error("Something went wrong, please try again");
+      toast.error(t("builder.errors.somethingWrong"));
       setBuilding(false);
     }
   };

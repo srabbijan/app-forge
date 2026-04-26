@@ -16,78 +16,80 @@ import {
   Store,
 } from "lucide-react";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
-
-const features = [
-  {
-    icon: Store,
-    title: "হিসাবী স্টোরে আপনার অ্যাপ",
-    desc: "আপনার ই-কমার্স অ্যাপ অটোমেটেড এবং আগের চেয়ে দ্রুত পাওয়া যাবে",
-    iconBg: "bg-sky-100",
-    iconColor: "text-sky-600",
-  },
-  {
-    icon: Palette,
-    title: "কাস্টমাইজযোগ্য থিম",
-    desc: "লোগো, অ্যাপের রং, থিম ইত্যাদি পরিবর্তন করে নিজের মতো করে নিন",
-    iconBg: "bg-pink-100",
-    iconColor: "text-pink-600",
-  },
-  {
-    icon: Package,
-    title: "আনলিমিটেড পণ্য এবং ক্যাটাগরি",
-    desc: "যতখুশি পণ্য যুক্ত করুন এবং ক্যাটাগরি সাজিয়ে দিন একদম সহজভাবে",
-    iconBg: "bg-emerald-100",
-    iconColor: "text-emerald-600",
-  },
-  {
-    icon: CreditCard,
-    title: "সংযুক্ত পেমেন্ট গেটওয়ে",
-    desc: "যেকোনো মাধ্যমে পেমেন্ট নেওয়া যাবে এবং পেমেন্ট ট্র্যাক করাও সহজ",
-    iconBg: "bg-violet-100",
-    iconColor: "text-violet-600",
-  },
-  {
-    icon: MessageCircleMore,
-    title: "লাইভ চ্যাট",
-    desc: "গ্রাহকের প্রশ্নের উত্তর দিন সরাসরি অ্যাপ থেকেই এবং বিক্রি বাড়ান দ্রুত",
-    iconBg: "bg-amber-100",
-    iconColor: "text-amber-600",
-  },
-  {
-    icon: CircleUserRound,
-    title: "কাস্টমার প্রোফাইল",
-    desc: "গ্রাহকের প্রোফাইল দেখুন, ক্রয় ইতিহাস জানুন এবং ব্যক্তিগত অফার দিন",
-    iconBg: "bg-rose-100",
-    iconColor: "text-rose-600",
-  },
-];
-
-const tutorialSteps = [
-  {
-    number: "1",
-    icon: LogIn,
-    title: "Sign in",
-    description: "Secure phone + PIN — no passwords to remember.",
-  },
-  {
-    number: "2",
-    icon: FileText,
-    title: "Customize",
-    description: "Set your name, icon, and brand color. See it live.",
-  },
-  {
-    number: "3",
-    icon: Building2Icon,
-    title: "Build",
-    description: "One click. We compile, sign, and deliver your app.",
-  },
-];
 
 const Landing = () => {
   const user = useUser();
   const [searchParam] = useSearchParams();
   const paramShopId = searchParam.get("shopId");
+  const { t } = useTranslation();
+
+  const features = [
+    {
+      icon: Store,
+      title: t("landing.features.items.store.title"),
+      desc: t("landing.features.items.store.desc"),
+      iconBg: "bg-sky-100",
+      iconColor: "text-sky-600",
+    },
+    {
+      icon: Palette,
+      title: t("landing.features.items.theme.title"),
+      desc: t("landing.features.items.theme.desc"),
+      iconBg: "bg-pink-100",
+      iconColor: "text-pink-600",
+    },
+    {
+      icon: Package,
+      title: t("landing.features.items.products.title"),
+      desc: t("landing.features.items.products.desc"),
+      iconBg: "bg-emerald-100",
+      iconColor: "text-emerald-600",
+    },
+    {
+      icon: CreditCard,
+      title: t("landing.features.items.payment.title"),
+      desc: t("landing.features.items.payment.desc"),
+      iconBg: "bg-violet-100",
+      iconColor: "text-violet-600",
+    },
+    {
+      icon: MessageCircleMore,
+      title: t("landing.features.items.chat.title"),
+      desc: t("landing.features.items.chat.desc"),
+      iconBg: "bg-amber-100",
+      iconColor: "text-amber-600",
+    },
+    {
+      icon: CircleUserRound,
+      title: t("landing.features.items.profile.title"),
+      desc: t("landing.features.items.profile.desc"),
+      iconBg: "bg-rose-100",
+      iconColor: "text-rose-600",
+    },
+  ];
+
+  const tutorialSteps = [
+    {
+      number: "1",
+      icon: LogIn,
+      title: t("landing.howItWorks.steps.signIn.title"),
+      description: t("landing.howItWorks.steps.signIn.desc"),
+    },
+    {
+      number: "2",
+      icon: FileText,
+      title: t("landing.howItWorks.steps.customize.title"),
+      description: t("landing.howItWorks.steps.customize.desc"),
+    },
+    {
+      number: "3",
+      icon: Building2Icon,
+      title: t("landing.howItWorks.steps.build.title"),
+      description: t("landing.howItWorks.steps.build.desc"),
+    },
+  ];
 
   useEffect(() => {
     if (paramShopId) return localStorage.setItem("paramShopId", paramShopId);
@@ -112,15 +114,14 @@ const Landing = () => {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
               </span>
-              <span className="text-muted-foreground">New</span>
-              <span className="font-semibold">
-                v2.0 — Live preview & instant builds
-              </span>
+              <span className="text-muted-foreground">{t("landing.new")}</span>
+              <span className="font-semibold">{t("landing.version")}</span>
             </div>
 
             <h1 className="animate-fade-in-up text-balance text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
-              Build Your Own{" "}
-              <span className="text-gradient">E-commerce App</span> in One Click
+              {t("landing.hero.title1")}{" "}
+              <span className="text-gradient">{t("landing.hero.title2")}</span>{" "}
+              {t("landing.hero.title3")}
             </h1>
 
             <p
@@ -130,7 +131,7 @@ const Landing = () => {
                 animationFillMode: "backwards",
               }}
             >
-              No coding. No delays. Your branded mobile app, instantly.
+              {t("landing.hero.subtitle")}
             </p>
 
             <div
@@ -142,7 +143,7 @@ const Landing = () => {
             >
               <Button asChild variant="hero" size="xl">
                 <Link to={paramShopId ? "/builder" : user ? "/shop" : "/login"}>
-                  Build your app{" "}
+                  {t("landing.hero.cta")}{" "}
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-all duration-300" />
                 </Link>
               </Button>
@@ -167,10 +168,10 @@ const Landing = () => {
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-balance text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
-              সব ফিচার এক জায়গায়
+              {t("landing.features.title")}
             </h2>
             <p className="mt-4 text-base text-muted-foreground sm:text-lg">
-              আপনার ব্যবসাকে অনন্য উচ্চতায় নিয়ে যেতে যা যা প্রয়োজন
+              {t("landing.features.subtitle")}
             </p>
           </div>
 
@@ -203,10 +204,10 @@ const Landing = () => {
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
             <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">
-              How it works
+              {t("landing.howItWorks.label")}
             </p>
             <h2 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl">
-              Three steps. Sixty seconds.
+              {t("landing.howItWorks.title")}
             </h2>
           </div>
 
@@ -245,25 +246,27 @@ const Landing = () => {
 
       <footer className="border-t border-border/60 py-10">
         <div className="container flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
-          <p>© {new Date().getFullYear()} Hishabee. Build apps in seconds.</p>
+          <p>
+            {t("landing.footer.copyright", { year: new Date().getFullYear() })}
+          </p>
           <div className="flex gap-6">
             <a
               href="https://app.hishabee.business/privacy-policy"
               className="hover:text-foreground transition-base"
             >
-              Privacy
+              {t("landing.footer.privacy")}
             </a>
             <a
               href="https://app.hishabee.business/general-terms-of-use"
               className="hover:text-foreground transition-base"
             >
-              Terms
+              {t("landing.footer.terms")}
             </a>
             <a
               href="https://www.hishabee.io/"
               className="hover:text-foreground transition-base"
             >
-              Contact
+              {t("landing.footer.contact")}
             </a>
           </div>
         </div>

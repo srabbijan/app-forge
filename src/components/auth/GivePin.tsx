@@ -9,7 +9,8 @@ import { LoginResponse } from "@/types/apiResponse";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { type ChangeEvent, useState } from "react";
+import { useState, type ChangeEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Text } from "../common/Text";
 
@@ -19,6 +20,7 @@ const GivePin = () => {
   const [error, setError] = useState<string | null>(null);
   const mobile_number = useCurrentNumber();
   const commonStore = useCommonStore();
+  const { t } = useTranslation();
 
   const phoneCode = useCurrentPhoneCode();
 
@@ -44,7 +46,7 @@ const GivePin = () => {
     onError: (error: AxiosError<{ message: string }>) => {
       const message = error?.response?.data?.message;
       setPin("");
-      setError(message ?? "Login failed! Please try again.");
+      setError(message ?? t("login.loginFailed"));
     },
   });
 
@@ -61,7 +63,7 @@ const GivePin = () => {
         }}
       >
         <div className="space-y-4 mb-2">
-          <Text title={"Enter PIN Number"} />
+          <Text title={t("login.enterPin")} />
           <div className="relative">
             <input
               name="username"
@@ -89,7 +91,7 @@ const GivePin = () => {
 
         <Button type="submit" className="w-full p-6">
           {isPending && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-          {"Login"}
+          {t("common.login")}
         </Button>
       </form>
     </div>

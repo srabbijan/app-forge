@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "features": "Features",
+    "howItWorks": "How it works",
+    "buildApp": "Build your app"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "back": "Back",
+    "next": "Next",
+    "login": "Login"
+  },
+  "login": {
+    "welcome": "Welcome back",
+    "subtitle": "Sign in to continue building",
+    "phoneNumber": "PHONE NUMBER",
+    "enterPin": "Enter PIN Number",
+    "loginFailed": "Login failed! Please try again."
+  },
+  "notFound": {
+    "title": "Oops! Page not found",
+    "returnHome": "Return to Home"
+  },
+  "landing": {
+    "new": "New",
+    "version": "v2.0 — Live preview & instant builds",
+    "hero": {
+      "title1": "Build Your Own",
+      "title2": "E-commerce App",
+      "title3": "in One Click",
+      "subtitle": "No coding. No delays. Your branded mobile app, instantly.",
+      "cta": "Build your app"
+    },
+    "features": {
+      "title": "All Features in One Place",
+      "subtitle": "Everything you need to take your business to new heights",
+      "items": {
+        "store": {
+          "title": "Your App on Hishabee Store",
+          "desc": "Get your e-commerce app automated and faster than ever before"
+        },
+        "theme": {
+          "title": "Customizable Theme",
+          "desc": "Change logo, app colors, themes and make it your own"
+        },
+        "products": {
+          "title": "Unlimited Products & Categories",
+          "desc": "Add as many products as you want and organize categories easily"
+        },
+        "payment": {
+          "title": "Integrated Payment Gateway",
+          "desc": "Accept payments through any method and track payments easily"
+        },
+        "chat": {
+          "title": "Live Chat",
+          "desc": "Answer customer questions directly from the app and increase sales fast"
+        },
+        "profile": {
+          "title": "Customer Profile",
+          "desc": "View customer profiles, check purchase history and offer personalized deals"
+        }
+      }
+    },
+    "howItWorks": {
+      "label": "How it works",
+      "title": "Three steps. Sixty seconds.",
+      "steps": {
+        "signIn": {
+          "title": "Sign in",
+          "desc": "Secure phone + PIN — no passwords to remember."
+        },
+        "customize": {
+          "title": "Customize",
+          "desc": "Set your name, icon, and brand color. See it live."
+        },
+        "build": {
+          "title": "Build",
+          "desc": "One click. We compile, sign, and deliver your app."
+        }
+      }
+    },
+    "footer": {
+      "copyright": "© {{year}} Hishabee. Build apps in seconds.",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "contact": "Contact"
+    }
+  }
+}
