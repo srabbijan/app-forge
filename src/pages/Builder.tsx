@@ -1,3 +1,4 @@
+import { LanguageToggle } from "@/components/common/LanguageToggle";
 import { Logo } from "@/components/Logo";
 import { PhonePreview } from "@/components/PhonePreview";
 import { Button } from "@/components/ui/button";
@@ -218,13 +219,14 @@ const Builder = () => {
             <Logo />
             <span className="hidden h-5 w-px bg-border sm:block" />
             <span className="hidden text-sm text-muted-foreground sm:block">
-              App Builder
+              {t("builder.header.appBuilder")}
             </span>
           </div>
+          <LanguageToggle />
           <div className="flex items-center gap-2 rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs">
             <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
             <span className="hidden text-muted-foreground sm:inline">
-              Connected to
+              {t("builder.header.connectedTo")}
             </span>
             <span className="font-mono font-semibold">{shopId}</span>
           </div>
@@ -238,13 +240,13 @@ const Builder = () => {
             active={activeTab === "details"}
             onClick={() => setActiveTab("details")}
             icon={<SlidersHorizontal className="h-3.5 w-3.5" />}
-            label="Details"
+            label={t("builder.tabs.details")}
           />
           <TabButton
             active={activeTab === "preview"}
             onClick={() => setActiveTab("preview")}
             icon={<Smartphone className="h-3.5 w-3.5" />}
-            label="Preview"
+            label={t("builder.tabs.preview")}
           />
         </div>
 
@@ -264,17 +266,19 @@ const Builder = () => {
                   name="email"
                   render={({ field }) => (
                     <FieldCard
-                      label="Email"
-                      hint="We'll send the download link here"
+                      label={t("builder.form.email.label")}
+                      hint={t("builder.form.email.hint")}
                     >
                       <FormItem>
-                        <FormLabel className="sr-only">Email</FormLabel>
+                        <FormLabel className="sr-only">
+                          {t("builder.form.email.label")}
+                        </FormLabel>
                         <FormControl>
                           <div className="group relative">
                             <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-base group-focus-within:text-primary" />
                             <Input
                               type="email"
-                              placeholder="you@example.com"
+                              placeholder={t("builder.form.email.placeholder")}
                               className="h-12 rounded-xl pl-11 focus:ring-4 focus:ring-primary/15"
                               {...field}
                             />
@@ -291,12 +295,17 @@ const Builder = () => {
                   control={form.control}
                   name="appName"
                   render={({ field }) => (
-                    <FieldCard label="App name" hint="Appears below the icon">
+                    <FieldCard
+                      label={t("builder.form.appName.label")}
+                      hint={t("builder.form.appName.hint")}
+                    >
                       <FormItem>
-                        <FormLabel className="sr-only">App name</FormLabel>
+                        <FormLabel className="sr-only">
+                          {t("builder.form.appName.label")}
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="e.g. Sunset Boutique"
+                            placeholder={t("builder.form.appName.placeholder")}
                             className="h-12 rounded-xl px-3 focus:ring-4 focus:ring-primary/15"
                             {...field}
                             onChange={(e) =>
@@ -314,7 +323,10 @@ const Builder = () => {
                 />
 
                 {/* Icon */}
-                <FieldCard label="App icon" hint="Square, at least 512×512 px">
+                <FieldCard
+                  label={t("builder.form.appIcon.label")}
+                  hint={t("builder.form.appIcon.hint")}
+                >
                   <input
                     ref={fileRef}
                     type="file"
@@ -328,7 +340,7 @@ const Builder = () => {
                         <>
                           <img
                             src={appIcon}
-                            alt="App icon preview"
+                            alt={t("builder.form.appIcon.altPreview")}
                             className="h-full w-full object-cover"
                           />
                           <button
@@ -338,7 +350,7 @@ const Builder = () => {
                               setIconFile(undefined);
                             }}
                             className="absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm transition-base hover:scale-110"
-                            aria-label="Remove icon"
+                            aria-label={t("builder.form.appIcon.remove")}
                           >
                             <X className="h-2.5 w-2.5" />
                           </button>
@@ -355,15 +367,17 @@ const Builder = () => {
                       onClick={() => fileRef.current?.click()}
                     >
                       <ImagePlus className="h-4 w-4" />
-                      {appIcon ? "Change icon" : "Upload icon"}
+                      {appIcon
+                        ? t("builder.form.appIcon.change")
+                        : t("builder.form.appIcon.upload")}
                     </Button>
                   </div>
                 </FieldCard>
 
                 {/* Color */}
                 <FieldCard
-                  label="Primary color"
-                  hint="Accent used across your app"
+                  label={t("builder.form.primaryColor.label")}
+                  hint={t("builder.form.primaryColor.hint")}
                 >
                   <div className="flex flex-wrap items-center gap-2.5">
                     {COLOR_PRESETS.map((preset) => {
@@ -390,7 +404,7 @@ const Builder = () => {
                         type="color"
                         onChange={(e) => setColor(hexToHsl(e.target.value))}
                         className="absolute inset-0 cursor-pointer opacity-0"
-                        aria-label="Custom color"
+                        aria-label={t("builder.form.primaryColor.custom")}
                       />
                       <span className="text-xs font-semibold">+</span>
                     </label>
@@ -399,10 +413,11 @@ const Builder = () => {
 
                 {/* Build CTA */}
                 <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-card to-secondary/40 p-5">
-                  <p className="text-sm font-semibold">Ready to build?</p>
+                  <p className="text-sm font-semibold">
+                    {t("builder.build.title")}
+                  </p>
                   <p className="mt-0.5 text-xs text-muted-foreground">
-                    Your APK will be compiled and sent to your email within
-                    minutes.
+                    {t("builder.build.desc")}
                   </p>
                   <Button
                     type="submit"
@@ -414,11 +429,12 @@ const Builder = () => {
                     {building ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        Building your app…
+                        {t("builder.build.building")}
                       </>
                     ) : (
                       <>
-                        Build app <Rocket className="h-4 w-4" />
+                        {t("builder.build.button")}{" "}
+                        <Rocket className="h-4 w-4" />
                       </>
                     )}
                   </Button>
@@ -435,7 +451,7 @@ const Builder = () => {
                 {/* App icon chip */}
                 <div className="rounded-2xl border border-border/60 bg-gradient-to-br from-secondary/60 via-card to-accent/40 p-5">
                   <p className="mb-4 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    App Icon
+                    {t("builder.preview.appIcon")}
                   </p>
                   <div className="flex justify-center">
                     <div className="flex flex-col items-center gap-2">
@@ -458,7 +474,7 @@ const Builder = () => {
                         )}
                       </div>
                       <span className="max-w-[80px] truncate text-xs font-medium">
-                        {appName || "Your App"}
+                        {appName || t("builder.preview.yourApp")}
                       </span>
                     </div>
                   </div>
@@ -468,7 +484,7 @@ const Builder = () => {
                 <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-secondary/60 via-card to-accent/40 p-8 sm:p-12">
                   <div className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-card/80 px-3 py-1 text-xs font-medium backdrop-blur-md">
                     <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-                    Live preview
+                    {t("builder.preview.livePreview")}
                   </div>
                   <div className="flex justify-center pt-4">
                     <PhonePreview
@@ -497,11 +513,12 @@ const Builder = () => {
                     {building ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        Building your app…
+                        {t("builder.build.building")}
                       </>
                     ) : (
                       <>
-                        Build app <Rocket className="h-4 w-4" />
+                        {t("builder.build.button")}{" "}
+                        <Rocket className="h-4 w-4" />
                       </>
                     )}
                   </Button>

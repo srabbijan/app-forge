@@ -87,5 +87,78 @@
       "terms": "Terms",
       "contact": "Contact"
     }
+  },
+  "builder": {
+    "header": {
+      "appBuilder": "App Builder",
+      "connectedTo": "Connected to"
+    },
+    "tabs": {
+      "details": "Details",
+      "preview": "Preview"
+    },
+    "form": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address",
+      "appNameRequired": "App name is required",
+      "email": {
+        "label": "Email",
+        "hint": "We'll send the download link here",
+        "placeholder": "you@example.com"
+      },
+      "appName": {
+        "label": "App name",
+        "hint": "Appears below the icon",
+        "placeholder": "e.g. Sunset Boutique"
+      },
+      "appIcon": {
+        "label": "App icon",
+        "hint": "Square, at least 512×512 px",
+        "altPreview": "App icon preview",
+        "remove": "Remove icon",
+        "change": "Change icon",
+        "upload": "Upload icon"
+      },
+      "primaryColor": {
+        "label": "Primary color",
+        "hint": "Accent used across your app",
+        "custom": "Custom color"
+      }
+    },
+    "build": {
+      "title": "Ready to build?",
+      "desc": "Your APK will be compiled and sent to your email within minutes.",
+      "building": "Building your app…",
+      "button": "Build app"
+    },
+    "preview": {
+      "livePreview": "Live preview",
+      "yourApp": "Your App",
+      "appIcon": "App Icon"
+    },
+    "errors": {
+      "maxIconSize": "Icon size must be less than 2MB",
+      "iconUploadFailed": "Failed to upload icon",
+      "buildFailed": "Failed to trigger build",
+      "somethingWrong": "Something went wrong"
+    }
+  },
+  "success": {
+    "buildTriggered": "Build triggered",
+    "title": "You're all set!",
+    "description": "<0>{{appName}}</0> is now being compiled. Builds typically take 3–5 minutes. We'll email the download link to <1>{{userEmail}}</1> when it's ready.",
+    "shop": "Shop #{{id}}",
+    "building": "Building",
+    "nextSteps": {
+      "title": "What happens next",
+      "step1": "Actions picks up the build job and compiles your Android app",
+      "step2": "An APK is generated and signed with your shop's configuration",
+      "step3": "A download link is emailed to {{email}}"
+    },
+    "emailReminder": {
+      "title": "Check your inbox in ~5 minutes",
+      "desc": "Download link will be sent to <0>{{email}}</0>. Check spam if you don't see it."
+    },
+    "buildAnother": "← Build another app"
   }
 }
