@@ -5,64 +5,82 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@/stores/store";
 import {
   ArrowRight,
-  Code2,
+  Building2Icon,
+  CircleUserRound,
+  CreditCard,
+  FileText,
+  LogIn,
+  MessageCircleMore,
+  Package,
   Palette,
-  Rocket,
-  ShieldCheck,
-  Smartphone,
-  Zap,
+  Store,
 } from "lucide-react";
 import { useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 const features = [
   {
-    icon: Zap,
-    title: "Instant build",
-    desc: "From form submit to download in under 60 seconds.",
+    icon: Store,
+    title: "হিসাবী স্টোরে আপনার অ্যাপ",
+    desc: "আপনার ই-কমার্স অ্যাপ অটোমেটেড এবং আগের চেয়ে দ্রুত পাওয়া যাবে",
+    iconBg: "bg-sky-100",
+    iconColor: "text-sky-600",
   },
   {
     icon: Palette,
-    title: "Pixel-perfect branding",
-    desc: "Your colors, your logo.",
+    title: "কাস্টমাইজযোগ্য থিম",
+    desc: "লোগো, অ্যাপের রং, থিম ইত্যাদি পরিবর্তন করে নিজের মতো করে নিন",
+    iconBg: "bg-pink-100",
+    iconColor: "text-pink-600",
   },
   {
-    icon: Smartphone,
-    title: "Android",
-    desc: "Native apps generated for both stores.",
+    icon: Package,
+    title: "আনলিমিটেড পণ্য এবং ক্যাটাগরি",
+    desc: "যতখুশি পণ্য যুক্ত করুন এবং ক্যাটাগরি সাজিয়ে দিন একদম সহজভাবে",
+    iconBg: "bg-emerald-100",
+    iconColor: "text-emerald-600",
   },
   {
-    icon: ShieldCheck,
-    title: "Offline first",
-    desc: "Customers shop even without internet. Auto-sync later.",
+    icon: CreditCard,
+    title: "সংযুক্ত পেমেন্ট গেটওয়ে",
+    desc: "যেকোনো মাধ্যমে পেমেন্ট নেওয়া যাবে এবং পেমেন্ট ট্র্যাক করাও সহজ",
+    iconBg: "bg-violet-100",
+    iconColor: "text-violet-600",
   },
   {
-    icon: Rocket,
-    title: "Push notifications",
-    desc: "Drive sales with built-in campaign tooling.",
+    icon: MessageCircleMore,
+    title: "লাইভ চ্যাট",
+    desc: "গ্রাহকের প্রশ্নের উত্তর দিন সরাসরি অ্যাপ থেকেই এবং বিক্রি বাড়ান দ্রুত",
+    iconBg: "bg-amber-100",
+    iconColor: "text-amber-600",
   },
   {
-    icon: Code2,
-    title: "No code required",
-    desc: "Skip developers. Skip delays. Just ship.",
+    icon: CircleUserRound,
+    title: "কাস্টমার প্রোফাইল",
+    desc: "গ্রাহকের প্রোফাইল দেখুন, ক্রয় ইতিহাস জানুন এবং ব্যক্তিগত অফার দিন",
+    iconBg: "bg-rose-100",
+    iconColor: "text-rose-600",
   },
 ];
 
-const steps = [
+const tutorialSteps = [
   {
-    n: "01",
+    number: "1",
+    icon: LogIn,
     title: "Sign in",
-    desc: "Secure phone + PIN — no passwords to remember.",
+    description: "Secure phone + PIN — no passwords to remember.",
   },
   {
-    n: "02",
+    number: "2",
+    icon: FileText,
     title: "Customize",
-    desc: "Set your name, icon, and brand color. See it live.",
+    description: "Set your name, icon, and brand color. See it live.",
   },
   {
-    n: "03",
+    number: "3",
+    icon: Building2Icon,
     title: "Build",
-    desc: "One click. We compile, sign, and deliver your app.",
+    description: "One click. We compile, sign, and deliver your app.",
   },
 ];
 
@@ -144,37 +162,34 @@ const Landing = () => {
       {/* FEATURES */}
       <section
         id="features"
-        className="relative border-t border-border/60 py-24"
+        className="relative border-t border-border/50 bg-[#f8f6ef] py-24"
       >
         <div className="container">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">
-              Features
-            </p>
-            <h2 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl">
-              Everything you need to launch
+            <h2 className="text-balance text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
+              সব ফিচার এক জায়গায়
             </h2>
-            <p className="mt-4 text-muted-foreground">
-              A complete toolkit for going from idea to App Store — without
-              writing a single line of code.
+            <p className="mt-4 text-base text-muted-foreground sm:text-lg">
+              আপনার ব্যবসাকে অনন্য উচ্চতায় নিয়ে যেতে যা যা প্রয়োজন
             </p>
           </div>
 
-          <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f, i) => (
               <div
                 key={f.title}
-                className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 transition-smooth hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
+                className="group rounded-3xl border border-border/60 bg-background px-6 py-9 text-center transition-smooth hover:-translate-y-1 hover:shadow-lg"
                 style={{ animationDelay: `${i * 60}ms` }}
               >
-                <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/5 blur-2xl transition-smooth group-hover:bg-primary/15" />
-                <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-accent text-accent-foreground">
-                  <f.icon className="h-5 w-5" />
+                <div
+                  className={`mx-auto flex h-16 w-16 items-center justify-center rounded-full ${f.iconBg}`}
+                >
+                  <f.icon className={`h-7 w-7 ${f.iconColor}`} />
                 </div>
-                <h3 className="relative mt-5 text-lg font-semibold">
+                <h3 className="mt-7 text-2xl font-extrabold leading-snug text-foreground">
                   {f.title}
                 </h3>
-                <p className="relative mt-1.5 text-sm text-muted-foreground">
+                <p className="mx-auto mt-4 max-w-[34ch] text-base leading-relaxed text-muted-foreground">
                   {f.desc}
                 </p>
               </div>
@@ -195,20 +210,33 @@ const Landing = () => {
             </h2>
           </div>
 
-          <div className="mt-16 grid gap-6 md:grid-cols-3">
-            {steps.map((s, i) => (
-              <div
-                key={s.n}
-                className="relative rounded-2xl border border-border/60 bg-card p-8"
-              >
-                <span className="text-5xl font-extrabold text-gradient">
-                  {s.n}
-                </span>
-                <h3 className="mt-4 text-xl font-semibold">{s.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
-                {i < steps.length - 1 && (
-                  <ArrowRight className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-muted-foreground/40 md:block" />
+          <div className="grid md:grid-cols-3 gap-8 mt-16">
+            {tutorialSteps.map((step, index) => (
+              <div key={step.number} className="relative group">
+                {index < tutorialSteps.length - 1 && (
+                  <div className="hidden md:flex absolute top-1/2 left-full right-0 w-full items-center justify-center -translate-x-[46%] z-10">
+                    <ArrowRight className="w-10 h-10 text-primary" />
+                  </div>
                 )}
+                <article
+                  className="bg-card border-2 border-border rounded-xl p-6 relative hover:shadow-yellow hover:border-primary transition-all animate-fade-in"
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                >
+                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-14 h-14 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-2xl font-bold shadow-yellow">
+                    {step.number}
+                  </div>
+                  <div className="mt-8">
+                    <div className="bg-primary/10 w-16 h-16 rounded-lg flex items-center justify-center mb-4 mx-auto group-hover:rotate-12 transition-transform">
+                      <step.icon className="w-8 h-8 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-bold mb-3 text-center">
+                      {step.title}
+                    </h3>
+                    <p className="text-xs md:text-sm text-muted-foreground text-center">
+                      {step.description}
+                    </p>
+                  </div>
+                </article>
               </div>
             ))}
           </div>
